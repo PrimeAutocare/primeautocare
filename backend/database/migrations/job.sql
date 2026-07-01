@@ -1,3 +1,11 @@
+-- =====================================================
+-- File:        job.sql
+-- Purpose:     Creates the JOB table for PrimeAutocare
+-- Depends on:  (none)
+-- Author:      Senuka Wijerathna
+-- Created:     2026-07-01
+-- =====================================================
+
 DROP TABLE JOB CASCADE CONSTRAINTS;
 
 CREATE TABLE JOB (

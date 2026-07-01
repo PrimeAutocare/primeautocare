@@ -1,4 +1,11 @@
--- PrimeAutocare — one-shot schema setup
+-- =====================================================
+-- File:        schema.sql
+-- Purpose:     One-shot setup — runs all table migrations
+--              for PrimeAutocare in dependency order
+-- Author:      Senuka Wijerathna
+-- Created:     2026-07-01
+-- =====================================================
+
 -- Run in dependency order so foreign key targets always exist first.
 
 -- ── 1. No dependencies ───────────────────────────────────────────────────────

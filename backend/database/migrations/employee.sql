@@ -1,3 +1,11 @@
+-- =====================================================
+-- File:        employee.sql
+-- Purpose:     Creates the EMPLOYEE table for PrimeAutocare
+-- Depends on:  (none)
+-- Author:      Senuka Wijerathna
+-- Created:     2026-07-01
+-- =====================================================
+
 DROP TABLE EMPLOYEE CASCADE CONSTRAINTS;
 
 CREATE TABLE EMPLOYEE (

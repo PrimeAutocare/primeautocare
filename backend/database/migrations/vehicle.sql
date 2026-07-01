@@ -1,3 +1,11 @@
+-- =====================================================
+-- File:        vehicle.sql
+-- Purpose:     Creates the VEHICLE table for PrimeAutocare
+-- Depends on:  vehicle_owner.sql
+-- Author:      Senuka Wijerathna
+-- Created:     2026-07-01
+-- =====================================================
+
 DROP TABLE VEHICLE CASCADE CONSTRAINTS;
 
 CREATE TABLE VEHICLE (

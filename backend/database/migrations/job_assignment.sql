@@ -1,3 +1,11 @@
+-- =====================================================
+-- File:        job_assignment.sql
+-- Purpose:     Creates the JOB_ASSIGNMENT table for PrimeAutocare
+-- Depends on:  employee.sql, job.sql, vehicle_visit.sql
+-- Author:      Senuka Wijerathna
+-- Created:     2026-07-01
+-- =====================================================
+
 DROP TABLE JOB_ASSIGNMENT CASCADE CONSTRAINTS;
 
 CREATE TABLE JOB_ASSIGNMENT (

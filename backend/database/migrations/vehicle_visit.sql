@@ -1,3 +1,11 @@
+-- =====================================================
+-- File:        vehicle_visit.sql
+-- Purpose:     Creates the VEHICLE_VISIT table for PrimeAutocare
+-- Depends on:  vehicle.sql
+-- Author:      Senuka Wijerathna
+-- Created:     2026-07-01
+-- =====================================================
+
 DROP TABLE VEHICLE_VISIT CASCADE CONSTRAINTS;
 
 CREATE TABLE VEHICLE_VISIT (

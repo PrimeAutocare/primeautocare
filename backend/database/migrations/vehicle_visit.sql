@@ -9,8 +9,8 @@
 DROP TABLE VEHICLE_VISIT CASCADE CONSTRAINTS;
 
 CREATE TABLE VEHICLE_VISIT (
-    visit_id           NUMBER(5) CONSTRAINT vehicle_visit_pk PRIMARY KEY,
-    vehi_id            NUMBER(5) NOT NULL,
+    visit_id           NUMERIC(5) CONSTRAINT vehicle_visit_pk PRIMARY KEY,
+    vehi_id            NUMERIC(5) NOT NULL,
     visit_check_in_dt  DATE      NOT NULL,
     visit_check_out_dt DATE,
     visit_status       CHAR(1)   NOT NULL

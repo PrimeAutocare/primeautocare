@@ -9,12 +9,12 @@
 DROP TABLE VEHICLE CASCADE CONSTRAINTS;
 
 CREATE TABLE VEHICLE (
-    vehi_id      NUMBER(5)   CONSTRAINT vehicle_pk PRIMARY KEY,
-    owner_no     NUMBER(4)   NOT NULL,
+    vehi_id      NUMERIC(5)   CONSTRAINT vehicle_pk PRIMARY KEY,
+    owner_no     NUMERIC(4)   NOT NULL,
     vehi_license VARCHAR(10) NOT NULL,
     vehi_make    VARCHAR(20) NOT NULL,
     vehi_model   VARCHAR(20) NOT NULL,
-    vehi_year    NUMBER(4)   NOT NULL
+    vehi_year    NUMERIC(4)   NOT NULL
 );
 
 COMMENT ON COLUMN VEHICLE.vehi_id      IS 'Unique vehicle identifier';

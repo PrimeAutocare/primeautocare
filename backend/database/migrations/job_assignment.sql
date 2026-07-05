@@ -9,15 +9,15 @@
 DROP TABLE JOB_ASSIGNMENT CASCADE CONSTRAINTS;
 
 CREATE TABLE JOB_ASSIGNMENT (
-    jobassign_id          NUMBER(5)    CONSTRAINT job_assignment_pk PRIMARY KEY,
-    visit_id              NUMBER(5)    NOT NULL,
-    job_no                NUMBER(2)    NOT NULL,
-    jobassign_assigned_by NUMBER(4)    NOT NULL,
+    jobassign_id          NUMERIC(5)    CONSTRAINT job_assignment_pk PRIMARY KEY,
+    visit_id              NUMERIC(5)    NOT NULL,
+    job_no                NUMERIC(2)    NOT NULL,
+    jobassign_assigned_by NUMERIC(4)    NOT NULL,
     jobassign_assign_dt   DATE         NOT NULL,
     jobassign_start_dt    DATE,
     jobassign_complete_dt DATE,
     jobassign_status      CHAR(1)      NOT NULL,
-    jobassign_cost        NUMBER(9, 2),
+    jobassign_cost        NUMERIC(9, 2),
     jobassign_notes       VARCHAR(100)
 );
 

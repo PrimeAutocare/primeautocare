@@ -9,7 +9,7 @@
 DROP TABLE EMPLOYEE CASCADE CONSTRAINTS;
 
 CREATE TABLE EMPLOYEE (
-    emp_no        NUMBER(4)   CONSTRAINT employee_pk PRIMARY KEY,
+    emp_no        NUMERIC(4)   CONSTRAINT employee_pk PRIMARY KEY,
     emp_gname     VARCHAR(15) NOT NULL,
     emp_fname     VARCHAR(15) NOT NULL,
     emp_phone     VARCHAR(13) NOT NULL,

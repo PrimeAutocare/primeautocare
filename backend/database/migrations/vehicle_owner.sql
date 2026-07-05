@@ -9,7 +9,7 @@
 DROP TABLE VEHICLE_OWNER CASCADE CONSTRAINTS;
 
 CREATE TABLE VEHICLE_OWNER (
-    owner_no    NUMBER(4)   CONSTRAINT vehicle_owner_pk PRIMARY KEY,
+    owner_no    NUMERIC(4)   CONSTRAINT vehicle_owner_pk PRIMARY KEY,
     owner_name  VARCHAR(30) NOT NULL,
     owner_phone VARCHAR(13) NOT NULL,
     owner_email VARCHAR(30) NOT NULL

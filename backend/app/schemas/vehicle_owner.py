@@ -1,5 +1,10 @@
 from pydantic import BaseModel
 
+class VehicleOwnerCreate(BaseModel):
+    owner_name: str
+    owner_phone: str
+    owner_email: str
+
 class VehicleOwnerResponse(BaseModel):
     owner_no: int
     owner_name: str

@@ -11,7 +11,7 @@
 -- EMPLOYEE
 DROP TABLE IF EXISTS EMPLOYEE CASCADE;
 CREATE TABLE EMPLOYEE (
-    emp_no        INTEGER      CONSTRAINT employee_pk PRIMARY KEY,
+    emp_no        INTEGER GENERATED ALWAYS AS IDENTITY CONSTRAINT employee_pk PRIMARY KEY,
     emp_gname     VARCHAR(15)  NOT NULL,
     emp_fname     VARCHAR(15)  NOT NULL,
     emp_phone     VARCHAR(13)  NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE EMPLOYEE (
     emp_role      CHAR(1)      NOT NULL,
     emp_create_dt DATE         NOT NULL
 );
-COMMENT ON COLUMN EMPLOYEE.emp_no        IS 'Unique employee number';
+COMMENT ON COLUMN EMPLOYEE.emp_no        IS 'Unique employee number (auto-generated)';
 COMMENT ON COLUMN EMPLOYEE.emp_gname     IS 'Employee given (first) name';
 COMMENT ON COLUMN EMPLOYEE.emp_fname     IS 'Employee family (last) name';
 COMMENT ON COLUMN EMPLOYEE.emp_phone     IS 'Contact number — format: +94112233445';
@@ -34,21 +34,21 @@ ALTER TABLE EMPLOYEE ADD CONSTRAINT emp_role_chk CHECK (emp_role IN ('A', 'S', '
 -- JOB
 DROP TABLE IF EXISTS JOB CASCADE;
 CREATE TABLE JOB (
-    job_no   INTEGER     CONSTRAINT job_pk PRIMARY KEY,
+    job_no   INTEGER GENERATED ALWAYS AS IDENTITY CONSTRAINT job_pk PRIMARY KEY,
     job_desc VARCHAR(60) NOT NULL
 );
-COMMENT ON COLUMN JOB.job_no   IS 'Unique job type identifier';
+COMMENT ON COLUMN JOB.job_no   IS 'Unique job type identifier (auto-generated)';
 COMMENT ON COLUMN JOB.job_desc IS 'Description of the service/job type (e.g. Oil Change, Tyre Rotation)';
  
 -- VEHICLE_OWNER
 DROP TABLE IF EXISTS VEHICLE_OWNER CASCADE;
 CREATE TABLE VEHICLE_OWNER (
-    owner_no    INTEGER     CONSTRAINT vehicle_owner_pk PRIMARY KEY,
+    owner_no    INTEGER GENERATED ALWAYS AS IDENTITY CONSTRAINT vehicle_owner_pk PRIMARY KEY,
     owner_name  VARCHAR(30) NOT NULL,
     owner_phone VARCHAR(13) NOT NULL,
     owner_email VARCHAR(30) NOT NULL
 );
-COMMENT ON COLUMN VEHICLE_OWNER.owner_no    IS 'Unique vehicle owner number';
+COMMENT ON COLUMN VEHICLE_OWNER.owner_no    IS 'Unique vehicle owner number (auto-generated)';
 COMMENT ON COLUMN VEHICLE_OWNER.owner_name  IS 'Full name of the vehicle owner';
 COMMENT ON COLUMN VEHICLE_OWNER.owner_phone IS 'Contact number — format: +94112233445';
 COMMENT ON COLUMN VEHICLE_OWNER.owner_email IS 'Email address; must be unique across all owners';
@@ -59,14 +59,14 @@ ALTER TABLE VEHICLE_OWNER ADD CONSTRAINT owner_email_uq UNIQUE (owner_email);
 -- VEHICLE
 DROP TABLE IF EXISTS VEHICLE CASCADE;
 CREATE TABLE VEHICLE (
-    vehi_id      INTEGER     CONSTRAINT vehicle_pk PRIMARY KEY,
+    vehi_id      INTEGER GENERATED ALWAYS AS IDENTITY CONSTRAINT vehicle_pk PRIMARY KEY,
     owner_no     INTEGER     NOT NULL,
     vehi_license VARCHAR(10) NOT NULL,
     vehi_make    VARCHAR(20) NOT NULL,
     vehi_model   VARCHAR(20) NOT NULL,
     vehi_year    INTEGER     NOT NULL
 );
-COMMENT ON COLUMN VEHICLE.vehi_id      IS 'Unique vehicle identifier';
+COMMENT ON COLUMN VEHICLE.vehi_id      IS 'Unique vehicle identifier (auto-generated)';
 COMMENT ON COLUMN VEHICLE.owner_no     IS 'Reference to the owning VEHICLE_OWNER';
 COMMENT ON COLUMN VEHICLE.vehi_license IS 'Licence plate number. ERD specified VARCHAR(5); extended to VARCHAR(10) to accommodate real-world plate lengths (e.g. CAB-1234)';
 COMMENT ON COLUMN VEHICLE.vehi_make    IS 'Vehicle manufacturer (e.g. Toyota, Honda)';
@@ -79,13 +79,13 @@ ALTER TABLE VEHICLE ADD CONSTRAINT vehicle_owner_vehicle_fk FOREIGN KEY (owner_n
 -- VEHICLE_VISIT
 DROP TABLE IF EXISTS VEHICLE_VISIT CASCADE;
 CREATE TABLE VEHICLE_VISIT (
-    visit_id           INTEGER CONSTRAINT vehicle_visit_pk PRIMARY KEY,
+    visit_id           INTEGER GENERATED ALWAYS AS IDENTITY CONSTRAINT vehicle_visit_pk PRIMARY KEY,
     vehi_id            INTEGER NOT NULL,
     visit_check_in_dt  DATE    NOT NULL,
     visit_check_out_dt DATE,
     visit_status       CHAR(1) NOT NULL
 );
-COMMENT ON COLUMN VEHICLE_VISIT.visit_id           IS 'Unique visit identifier';
+COMMENT ON COLUMN VEHICLE_VISIT.visit_id           IS 'Unique visit identifier (auto-generated)';
 COMMENT ON COLUMN VEHICLE_VISIT.vehi_id            IS 'Reference to the VEHICLE being serviced';
 COMMENT ON COLUMN VEHICLE_VISIT.visit_check_in_dt  IS 'Date the vehicle was checked in for service';
 COMMENT ON COLUMN VEHICLE_VISIT.visit_check_out_dt IS 'Date the vehicle was collected by the owner; NULL until the vehicle is picked up';
@@ -98,7 +98,7 @@ ALTER TABLE VEHICLE_VISIT ADD CONSTRAINT visit_status_chk CHECK (visit_status IN
 -- JOB_ASSIGNMENT
 DROP TABLE IF EXISTS JOB_ASSIGNMENT CASCADE;
 CREATE TABLE JOB_ASSIGNMENT (
-    jobassign_id          INTEGER      CONSTRAINT job_assignment_pk PRIMARY KEY,
+    jobassign_id          INTEGER GENERATED ALWAYS AS IDENTITY CONSTRAINT job_assignment_pk PRIMARY KEY,
     visit_id              INTEGER      NOT NULL,
     job_no                INTEGER      NOT NULL,
     jobassign_assigned_by INTEGER      NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE JOB_ASSIGNMENT (
     jobassign_cost        NUMERIC(9, 2),
     jobassign_notes       VARCHAR(100)
 );
-COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_id          IS 'Unique job assignment identifier';
+COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_id          IS 'Unique job assignment identifier (auto-generated)';
 COMMENT ON COLUMN JOB_ASSIGNMENT.visit_id              IS 'Reference to the VEHICLE_VISIT this assignment belongs to';
 COMMENT ON COLUMN JOB_ASSIGNMENT.job_no                IS 'Reference to the JOB type being performed';
 COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_assigned_by IS 'emp_no of the employee who created this assignment';
@@ -123,3 +123,10 @@ ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT vehicle_visit_job_assignment_fk FOREIG
 ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT job_job_assignment_fk FOREIGN KEY (job_no) REFERENCES JOB (job_no);
 ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT employee_job_assignment_fk FOREIGN KEY (jobassign_assigned_by) REFERENCES EMPLOYEE (emp_no);
 ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT jobassign_status_chk CHECK (jobassign_status IN ('P', 'I', 'C', 'X'));
+
+ALTER TABLE EMPLOYEE ALTER COLUMN emp_no ADD GENERATED ALWAYS AS IDENTITY;
+ALTER TABLE JOB ALTER COLUMN job_no ADD GENERATED ALWAYS AS IDENTITY;
+ALTER TABLE VEHICLE_OWNER ALTER COLUMN owner_no ADD GENERATED ALWAYS AS IDENTITY;
+ALTER TABLE VEHICLE ALTER COLUMN vehi_id ADD GENERATED ALWAYS AS IDENTITY;
+ALTER TABLE VEHICLE_VISIT ALTER COLUMN visit_id ADD GENERATED ALWAYS AS IDENTITY;
+ALTER TABLE JOB_ASSIGNMENT ALTER COLUMN jobassign_id ADD GENERATED ALWAYS AS IDENTITY;

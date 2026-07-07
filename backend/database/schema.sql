@@ -16,7 +16,7 @@ CREATE TABLE EMPLOYEE (
     emp_fname     VARCHAR(15)  NOT NULL,
     emp_phone     VARCHAR(13)  NOT NULL,
     emp_email     VARCHAR(30)  NOT NULL,
-    emp_passhash  VARCHAR(30)  NOT NULL,
+    emp_passhash  VARCHAR(60)  NOT NULL,
     emp_role      CHAR(1)      NOT NULL,
     emp_create_dt DATE         NOT NULL
 );

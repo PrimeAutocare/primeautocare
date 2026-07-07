@@ -2,18 +2,20 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
+from app.auth import get_current_employee, require_role
 from app.database import get_db
+from app.models.employee import Employee
 from app.models.job import Job
 from app.schemas.job import JobResponse, JobCreate, JobUpdate
 
 router = APIRouter()
 
 @router.get("/jobs", response_model=List[JobResponse])
-def get_jobs(db: Session = Depends(get_db)):
+def get_jobs(db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
     return db.query(Job).all()
 
 @router.post("/jobs", response_model=JobResponse)
-def create_job(job: JobCreate, db: Session = Depends(get_db)):
+def create_job(job: JobCreate, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A", "S"))):
     new_job = Job(**job.model_dump())
     db.add(new_job)
     db.commit()
@@ -21,7 +23,7 @@ def create_job(job: JobCreate, db: Session = Depends(get_db)):
     return new_job
 
 @router.patch("/jobs/{job_no}", response_model=JobResponse)
-def update_job(job_no: int, job_update: JobUpdate, db: Session = Depends(get_db)):
+def update_job(job_no: int, job_update: JobUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A", "S"))):
     job = db.query(Job).filter(Job.job_no == job_no).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
@@ -35,7 +37,7 @@ def update_job(job_no: int, job_update: JobUpdate, db: Session = Depends(get_db)
     return job
 
 @router.delete("/jobs/{job_no}", status_code=204)
-def delete_job(job_no: int, db: Session = Depends(get_db)):
+def delete_job(job_no: int, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A"))):
     job = db.query(Job).filter(Job.job_no == job_no).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")

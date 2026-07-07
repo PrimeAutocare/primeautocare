@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import date
+from typing import Optional
 
 class EmployeeCreate(BaseModel):
     emp_gname: str
@@ -21,3 +22,10 @@ class EmployeeResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class EmployeeUpdate(BaseModel):
+    emp_gname: Optional[str] = None
+    emp_fname: Optional[str] = None
+    emp_phone: Optional[str] = None
+    emp_email: Optional[str] = None
+    emp_role: Optional[str] = None

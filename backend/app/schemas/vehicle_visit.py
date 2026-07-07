@@ -17,3 +17,7 @@ class VehicleVisitResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class VehicleVisitUpdate(BaseModel):
+    visit_check_out_dt: Optional[date] = None
+    visit_status: Optional[str] = None

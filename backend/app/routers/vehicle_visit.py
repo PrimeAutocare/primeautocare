@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.auth import get_current_employee
+from app.auth import get_current_employee, require_role
 from app.database import get_db
 from app.models.employee import Employee
 from app.models.vehicle_visit import VehicleVisit
@@ -37,7 +37,7 @@ def update_vehicle_visit(visit_id: int, visit_update: VehicleVisitUpdate, db: Se
     return visit
 
 @router.delete("/vehicle-visits/{visit_id}", status_code=204)
-def delete_vehicle_visit(visit_id: int, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
+def delete_vehicle_visit(visit_id: int, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A", "S"))):
     visit = db.query(VehicleVisit).filter(VehicleVisit.visit_id == visit_id).first()
     if not visit:
         raise HTTPException(status_code=404, detail="Vehicle visit not found")

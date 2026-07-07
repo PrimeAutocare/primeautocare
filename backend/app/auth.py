@@ -54,3 +54,13 @@ def get_current_employee(credentials: HTTPAuthorizationCredentials = Depends(sec
         raise credentials_exception
 
     return employee
+
+def require_role(*allowed_roles: str):
+    def role_checker(current_employee: Employee = Depends(get_current_employee)) -> Employee:
+        if current_employee.emp_role not in allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You do not have permission to perform this action"
+            )
+        return current_employee
+    return role_checker

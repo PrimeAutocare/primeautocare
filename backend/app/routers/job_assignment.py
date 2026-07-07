@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.auth import get_current_employee
+from app.auth import get_current_employee, require_role
 from app.database import get_db
 from app.models.job_assignment import JobAssignment
 from app.schemas.job_assignment import JobAssignmentResponse, JobAssignmentCreate, JobAssignmentUpdate
@@ -37,7 +37,7 @@ def update_job_assignment(jobassign_id: int, assignment_update: JobAssignmentUpd
     return assignment
 
 @router.delete("/job-assignments/{jobassign_id}", status_code=204)
-def delete_job_assignment(jobassign_id: int, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
+def delete_job_assignment(jobassign_id: int, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A", "S"))):
     assignment = db.query(JobAssignment).filter(JobAssignment.jobassign_id == jobassign_id).first()
     if not assignment:
         raise HTTPException(status_code=404, detail="Job assignment not found")

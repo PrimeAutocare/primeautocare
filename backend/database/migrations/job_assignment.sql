@@ -6,13 +6,13 @@
 -- Created:     2026-07-01
 -- =====================================================
 
-DROP TABLE JOB_ASSIGNMENT CASCADE CONSTRAINTS;
+DROP TABLE IF EXISTS JOB_ASSIGNMENT CASCADE;
 
 CREATE TABLE JOB_ASSIGNMENT (
-    jobassign_id          NUMERIC(5)    CONSTRAINT job_assignment_pk PRIMARY KEY,
-    visit_id              NUMERIC(5)    NOT NULL,
-    job_no                NUMERIC(2)    NOT NULL,
-    jobassign_assigned_by NUMERIC(4)    NOT NULL,
+    jobassign_id          INTEGER      CONSTRAINT job_assignment_pk PRIMARY KEY,
+    visit_id              INTEGER      NOT NULL,
+    job_no                INTEGER      NOT NULL,
+    jobassign_assigned_by INTEGER      NOT NULL,
     jobassign_assign_dt   DATE         NOT NULL,
     jobassign_start_dt    DATE,
     jobassign_complete_dt DATE,

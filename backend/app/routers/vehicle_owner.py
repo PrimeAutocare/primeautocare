@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
 from app.database import get_db
 from app.models.vehicle_owner import VehicleOwner
-from app.schemas.vehicle_owner import VehicleOwnerResponse, VehicleOwnerCreate
+from app.schemas.vehicle_owner import VehicleOwnerResponse, VehicleOwnerCreate, VehicleOwnerUpdate
 
 router = APIRouter()
 
@@ -19,3 +19,27 @@ def create_vehicle_owner(owner: VehicleOwnerCreate, db: Session = Depends(get_db
     db.commit()
     db.refresh(new_owner)
     return new_owner
+
+@router.patch("/vehicle-owners/{owner_no}", response_model=VehicleOwnerResponse)
+def update_vehicle_owner(owner_no: int, owner_update: VehicleOwnerUpdate, db: Session = Depends(get_db)):
+    owner = db.query(VehicleOwner).filter(VehicleOwner.owner_no == owner_no).first()
+    if not owner:
+        raise HTTPException(status_code=404, detail="Vehicle owner not found")
+
+    update_data = owner_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(owner, key, value)
+
+    db.commit()
+    db.refresh(owner)
+    return owner
+
+@router.delete("/vehicle-owners/{owner_no}", status_code=204)
+def delete_vehicle_owner(owner_no: int, db: Session = Depends(get_db)):
+    owner = db.query(VehicleOwner).filter(VehicleOwner.owner_no == owner_no).first()
+    if not owner:
+        raise HTTPException(status_code=404, detail="Vehicle owner not found")
+
+    db.delete(owner)
+    db.commit()
+    return None

@@ -28,3 +28,10 @@ class JobAssignmentResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class JobAssignmentUpdate(BaseModel):
+    jobassign_start_dt: Optional[date] = None
+    jobassign_complete_dt: Optional[date] = None
+    jobassign_status: Optional[str] = None
+    jobassign_cost: Optional[Decimal] = None
+    jobassign_notes: Optional[str] = None

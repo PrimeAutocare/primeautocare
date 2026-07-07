@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class VehicleOwnerCreate(BaseModel):
     owner_name: str
@@ -13,3 +14,8 @@ class VehicleOwnerResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class VehicleOwnerUpdate(BaseModel):
+    owner_name: Optional[str] = None
+    owner_phone: Optional[str] = None
+    owner_email: Optional[str] = None

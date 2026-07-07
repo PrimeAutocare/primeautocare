@@ -9,7 +9,13 @@
 
 -- EMPLOYEE
 INSERT INTO EMPLOYEE (emp_gname, emp_fname, emp_phone, emp_email, emp_passhash, emp_role, emp_create_dt)
-VALUES ('Kasun', 'ABCD', '+94771234567', 'kasun@primeautocare.com', 'placeholder_hash', 'A', '2026-07-01');
+VALUES ('Kasun', 'Kumarasiri', '+94771234567', 'ksuna@primeautocare.com', '$2b$12$tByj3Y3JCx4Ij2PVG.7wtuicoJQDbQn4dOhjKVFdvWDbuJ/zpFw72', 'A', '2026-07-01'); --yourtestpassword
+
+INSERT INTO EMPLOYEE (emp_gname, emp_fname, emp_phone, emp_email, emp_passhash, emp_role, emp_create_dt)
+VALUES ('Saman', 'Piyasena', '+94547869535', 'spiya@primeautocare.com', '$2b$12$/gt9uOl7pds7bIMHP9pf2eo5nln5KBHOuD8xsJphiH.Czp1XJhKgW', 'S', '2026-07-07'); --my2password
+
+INSERT INTO EMPLOYEE (emp_gname, emp_fname, emp_phone, emp_email, emp_passhash, emp_role, emp_create_dt)
+VALUES ('Thushara', 'Supun', '+60827658704', 'tupun@primeautocare.com', '$2b$12$aRWRXGXPf8zlt3uh2hDFou7IY5K0W.cApBsgUnRChc9aQloMRjRRa', 'T', '2026-07-07'); --abcd123
 
 -- JOB
 INSERT INTO JOB (job_desc) VALUES ('Oil Change');

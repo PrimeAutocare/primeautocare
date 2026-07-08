@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
+import JobAssignments from "./pages/JobAssignments";
 
 function App() {
   const { employee, loading } = useAuth();
@@ -23,7 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<div>Dashboard placeholder</div>} />
-          <Route path="job-assignments" element={<div>Job Assignments placeholder</div>} />
+          <Route path="job-assignments" element={<JobAssignments />} />
           <Route path="vehicles" element={<div>Vehicles placeholder</div>} />
           <Route path="vehicle-visits" element={<div>Visits placeholder</div>} />
           <Route path="vehicle-owners" element={<div>Owners placeholder</div>} />

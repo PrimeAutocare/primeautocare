@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.get("/employees", response_model=List[EmployeeResponse])
 def get_employees(db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
-    return db.query(Employee).all()
+    return db.query(Employee).order_by(Employee.emp_no.asc()).all()
 
 @router.post("/employees", response_model=EmployeeResponse)
 def create_employee(employee: EmployeeCreate, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A"))):

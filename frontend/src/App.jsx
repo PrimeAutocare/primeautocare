@@ -1,7 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
+import VehicleOwners from "./pages/VehicleOwners";
+import Vehicles from "./pages/Vehicles";
+import VehicleVisits from "./pages/VehicleVisits";
+import Employees from "./pages/Employees";
+import Jobs from "./pages/Jobs";
 import JobAssignments from "./pages/JobAssignments";
 
 function App() {
@@ -25,11 +31,11 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<div>Dashboard placeholder</div>} />
           <Route path="job-assignments" element={<JobAssignments />} />
-          <Route path="vehicles" element={<div>Vehicles placeholder</div>} />
-          <Route path="vehicle-visits" element={<div>Visits placeholder</div>} />
-          <Route path="vehicle-owners" element={<div>Owners placeholder</div>} />
-          <Route path="employees" element={<div>Employees placeholder</div>} />
-          <Route path="jobs" element={<div>Job Catalog placeholder</div>} />
+          <Route path="vehicles" element={<Vehicles />} />
+          <Route path="vehicle-visits" element={<VehicleVisits />} />  
+          <Route path="vehicle-owners" element={<VehicleOwners />} />
+          <Route path="employees" element={<Employees />} />
+          <Route path="jobs" element={<Jobs />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

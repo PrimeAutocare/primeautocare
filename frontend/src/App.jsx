@@ -3,6 +3,7 @@ import { useAuth } from "./context/AuthContext";
 
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
+import Dashboard from "./pages/Dashboard";
 import VehicleOwners from "./pages/VehicleOwners";
 import Vehicles from "./pages/Vehicles";
 import VehicleVisits from "./pages/VehicleVisits";
@@ -29,7 +30,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<div>Dashboard placeholder</div>} />
+          <Route index element={<Dashboard />} />
           <Route path="job-assignments" element={<JobAssignments />} />
           <Route path="vehicles" element={<Vehicles />} />
           <Route path="vehicle-visits" element={<VehicleVisits />} />  

@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get("/vehicle-owners", response_model=List[VehicleOwnerResponse])
 def get_vehicle_owners(db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
-    return db.query(VehicleOwner).all()
+    return db.query(VehicleOwner).order_by(VehicleOwner.owner_no.asc()).all()
 
 @router.post("/vehicle-owners", response_model=VehicleOwnerResponse)
 def create_vehicle_owner(owner: VehicleOwnerCreate, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):

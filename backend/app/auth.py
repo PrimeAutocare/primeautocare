@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from dotenv import load_dotenv
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
@@ -34,13 +34,14 @@ def create_access_token(data: dict) -> str:
 def decode_access_token(token: str):
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
-def get_current_employee(credentials: HTTPAuthorizationCredentials = Depends(security_scheme), db: Session = Depends(get_db)) -> Employee:
-    token = credentials.credentials
+def get_current_employee(request: Request, db: Session = Depends(get_db)) -> Employee:
+    token = request.cookies.get("access_token")
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
     )
+    if not token:
+        raise credentials_exception
     try:
         payload = decode_access_token(token)
         emp_no: str = payload.get("sub")

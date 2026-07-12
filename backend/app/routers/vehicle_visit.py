@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get("/vehicle-visits", response_model=List[VehicleVisitResponse])
 def get_vehicle_visits(db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
-    return db.query(VehicleVisit).all()
+    return db.query(VehicleVisit).order_by(VehicleVisit.visit_id.asc()).all()
 
 @router.post("/vehicle-visits", response_model=VehicleVisitResponse)
 def create_vehicle_visit(visit: VehicleVisitCreate, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):

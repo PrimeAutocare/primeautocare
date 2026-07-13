@@ -7,6 +7,7 @@ from app.database import get_db
 from app.models.job_assignment import JobAssignment
 from app.schemas.job_assignment import JobAssignmentResponse, JobAssignmentCreate, JobAssignmentUpdate
 from app.models.employee import Employee
+from app.mongo import log_assignment_event
 
 router = APIRouter()
 
@@ -20,6 +21,14 @@ def create_job_assignment(assignment: JobAssignmentCreate, db: Session = Depends
     db.add(new_assignment)
     db.commit()
     db.refresh(new_assignment)
+
+    log_assignment_event(
+        jobassign_id=new_assignment.jobassign_id,
+        event="created",
+        changed_by=current_employee.emp_no,
+        details=assignment.model_dump(),
+    )
+
     return new_assignment
 
 @router.patch("/job-assignments/{jobassign_id}", response_model=JobAssignmentResponse)
@@ -34,6 +43,17 @@ def update_job_assignment(jobassign_id: int, assignment_update: JobAssignmentUpd
 
     db.commit()
     db.refresh(assignment)
+
+    try:
+        log_assignment_event(
+            jobassign_id=jobassign_id,
+            event="status_updated" if "jobassign_status" in update_data else "updated",
+            changed_by=current_employee.emp_no,
+            details=update_data,
+        )
+    except Exception as e:
+        print(f"Warning: failed to log assignment event to MongoDB: {e}")
+
     return assignment
 
 @router.delete("/job-assignments/{jobassign_id}", status_code=204)

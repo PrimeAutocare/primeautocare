@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { get, post, patch, del } from "../api/client";
+import { get, post, del } from "../api/client";
 
 function VehicleOwners() {
   const [owners, setOwners] = useState([]);
@@ -11,10 +11,6 @@ function VehicleOwners() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [emailInput, setEmailInput] = useState("");
-
-  useEffect(() => {
-    loadOwners();
-  }, []);
 
   async function loadOwners() {
     setLoading(true);
@@ -28,6 +24,10 @@ function VehicleOwners() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    loadOwners();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();

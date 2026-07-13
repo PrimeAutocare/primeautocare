@@ -1,15 +1,11 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import { post, get } from "../api/client";
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
 
   async function checkAuth() {
     try {
@@ -21,6 +17,10 @@ export function AuthProvider({ children }) {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   async function login(emp_email, password) {
     await post("/login", { emp_email, password });
@@ -37,8 +37,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

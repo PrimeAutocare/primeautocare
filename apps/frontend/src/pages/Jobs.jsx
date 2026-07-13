@@ -10,10 +10,6 @@ function Jobs() {
 
   const [jobDesc, setJobDesc] = useState("");
 
-  useEffect(() => {
-    loadJobs();
-  }, []);
-
   async function loadJobs() {
     setLoading(true);
     setError("");
@@ -26,6 +22,10 @@ function Jobs() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    loadJobs();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();

@@ -15,10 +15,6 @@ function Vehicles() {
   const [model, setModel] = useState("");
   const [year, setYear] = useState("");
 
-  useEffect(() => {
-    loadAll();
-  }, []);
-
   async function loadAll() {
     setLoading(true);
     setError("");
@@ -35,6 +31,10 @@ function Vehicles() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    loadAll();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();

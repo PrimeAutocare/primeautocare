@@ -19,10 +19,6 @@ function VehicleVisits() {
     { value: "O", label: "Out / Picked Up" },
   ];
 
-  useEffect(() => {
-    loadAll();
-  }, []);
-
   async function loadAll() {
     setLoading(true);
     setError("");
@@ -39,6 +35,10 @@ function VehicleVisits() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    loadAll();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();

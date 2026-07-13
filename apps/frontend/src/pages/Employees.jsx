@@ -17,10 +17,6 @@ function Employees() {
 
   const ROLE_LABELS = { A: "Admin", S: "Supervisor", T: "Technician" };
 
-  useEffect(() => {
-    loadEmployees();
-  }, []);
-
   async function loadEmployees() {
     setLoading(true);
     setError("");
@@ -33,6 +29,10 @@ function Employees() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    loadEmployees();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();

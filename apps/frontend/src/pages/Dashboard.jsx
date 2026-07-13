@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { get } from "../api/client";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 function Dashboard() {
   const { employee } = useAuth();
@@ -8,10 +8,6 @@ function Dashboard() {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    loadData();
-  }, []);
 
   async function loadData() {
     setLoading(true);
@@ -29,6 +25,10 @@ function Dashboard() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   if (loading) return <p className="text-slate-400">Loading...</p>;
   if (error) return <p className="text-red-400">{error}</p>;

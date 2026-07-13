@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { get, post, patch } from "../api/client";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 function JobAssignments() {
   const { employee } = useAuth();
@@ -24,10 +24,6 @@ function JobAssignments() {
     { value: "X", label: "Cancelled" },
   ];
 
-  useEffect(() => {
-    loadAll();
-  }, []);
-
   async function loadAll() {
     setLoading(true);
     setError("");
@@ -46,6 +42,10 @@ function JobAssignments() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    loadAll();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();

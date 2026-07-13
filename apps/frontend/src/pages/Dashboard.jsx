@@ -27,7 +27,9 @@ function Dashboard() {
   }
 
   useEffect(() => {
-    loadData();
+    (async () => {
+      await loadData();
+    })();
   }, []);
 
   if (loading) return <p className="text-slate-400">Loading...</p>;

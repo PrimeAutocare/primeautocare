@@ -1,7 +1,6 @@
-import { createContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { post, get } from "../api/client";
-
-export const AuthContext = createContext(null);
+import { AuthContext } from "./AuthContextInstance";
 
 export function AuthProvider({ children }) {
   const [employee, setEmployee] = useState(null);
@@ -19,7 +18,9 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    checkAuth();
+    (async () => {
+      await checkAuth();
+    })();
   }, []);
 
   async function login(emp_email, password) {

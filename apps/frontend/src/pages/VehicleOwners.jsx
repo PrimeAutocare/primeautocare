@@ -26,7 +26,9 @@ function VehicleOwners() {
   }
 
   useEffect(() => {
-    loadOwners();
+    (async () => {
+      await loadOwners();
+    })();
   }, []);
 
   async function handleSubmit(e) {

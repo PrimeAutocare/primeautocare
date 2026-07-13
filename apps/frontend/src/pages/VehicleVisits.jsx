@@ -37,7 +37,9 @@ function VehicleVisits() {
   }
 
   useEffect(() => {
-    loadAll();
+    (async () => {
+      await loadAll();
+    })();
   }, []);
 
   async function handleSubmit(e) {

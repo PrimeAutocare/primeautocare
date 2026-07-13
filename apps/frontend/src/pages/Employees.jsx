@@ -31,7 +31,9 @@ function Employees() {
   }
 
   useEffect(() => {
-    loadEmployees();
+    (async () => {
+      await loadEmployees();
+    })();
   }, []);
 
   async function handleSubmit(e) {

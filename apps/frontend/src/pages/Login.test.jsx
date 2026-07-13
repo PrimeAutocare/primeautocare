@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import Login from "./Login";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContextInstance";
 
 function renderLogin(login) {
   return render(

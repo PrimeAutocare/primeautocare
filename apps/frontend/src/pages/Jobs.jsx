@@ -24,7 +24,9 @@ function Jobs() {
   }
 
   useEffect(() => {
-    loadJobs();
+    (async () => {
+      await loadJobs();
+    })();
   }, []);
 
   async function handleSubmit(e) {

@@ -5,7 +5,7 @@ class JobCreate(BaseModel):
     job_desc: str
 
 class JobResponse(BaseModel):
-    job_no: int
+    job_no: str
     job_desc: str
 
     class Config:

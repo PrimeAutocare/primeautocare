@@ -22,7 +22,7 @@ def create_employee(employee: EmployeeCreate, db: Session = Depends(get_db), cur
     return new_employee
 
 @router.patch("/employees/{emp_no}", response_model=EmployeeResponse)
-def update_employee(emp_no: int, emp_update: EmployeeUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A"))):
+def update_employee(emp_no: str, emp_update: EmployeeUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A"))):
     employee = db.query(Employee).filter(Employee.emp_no == emp_no).first()
     if not employee:
         raise HTTPException(status_code=404, detail="Employee not found")
@@ -36,7 +36,7 @@ def update_employee(emp_no: int, emp_update: EmployeeUpdate, db: Session = Depen
     return employee
 
 @router.delete("/employees/{emp_no}", status_code=204)
-def delete_employee(emp_no: int, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A"))):
+def delete_employee(emp_no: str, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A"))):
     employee = db.query(Employee).filter(Employee.emp_no == emp_no).first()
     if not employee:
         raise HTTPException(status_code=404, detail="Employee not found")

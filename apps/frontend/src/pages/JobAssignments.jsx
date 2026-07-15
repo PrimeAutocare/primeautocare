@@ -56,8 +56,8 @@ function JobAssignments() {
 
     try {
       await post("/job-assignments", {
-        visit_id: Number(visitId),
-        job_no: Number(jobNo),
+        visit_id: visitId,
+        job_no: jobNo,
         jobassign_assigned_by: employee.emp_no,
         jobassign_assign_dt: new Date().toISOString().split("T")[0],
         jobassign_status: "P",

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { get, post, del } from "../api/client";
 
-function VehicleOwners() {
-  const [owners, setOwners] = useState([]);
+function Customers() {
+  const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
@@ -12,12 +12,12 @@ function VehicleOwners() {
   const [phone, setPhone] = useState("");
   const [emailInput, setEmailInput] = useState("");
 
-  async function loadOwners() {
+  async function loadCustomers() {
     setLoading(true);
     setError("");
     try {
-      const data = await get("/vehicle-owners");
-      setOwners(data);
+      const data = await get("/customers");
+      setCustomers(data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -27,7 +27,7 @@ function VehicleOwners() {
 
   useEffect(() => {
     (async () => {
-      await loadOwners();
+      await loadCustomers();
     })();
   }, []);
 
@@ -36,15 +36,15 @@ function VehicleOwners() {
     setFormError("");
     setSubmitting(true);
     try {
-      await post("/vehicle-owners", {
-        owner_name: name,
-        owner_phone: phone,
-        owner_email: emailInput,
+      await post("/customers", {
+        cust_name: name,
+        cust_phone: phone,
+        cust_email: emailInput,
       });
       setName("");
       setPhone("");
       setEmailInput("");
-      await loadOwners();
+      await loadCustomers();
     } catch (err) {
       setFormError(err.message);
     } finally {
@@ -52,12 +52,12 @@ function VehicleOwners() {
     }
   }
 
-  async function handleDelete(ownerNo) {
-    if (!confirm("Delete this owner? This cannot be undone.")) return;
+  async function handleDelete(custNo) {
+    if (!confirm("Delete this customer? This cannot be undone.")) return;
     setError("");
     try {
-      await del(`/vehicle-owners/${ownerNo}`);
-      await loadOwners();
+      await del(`/customers/${custNo}`);
+      await loadCustomers();
     } catch (err) {
       setError(err.message);
     }
@@ -67,13 +67,13 @@ function VehicleOwners() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Vehicle Owners</h2>
+      <h2 className="text-2xl font-bold mb-6">Customers</h2>
 
       <form
         onSubmit={handleSubmit}
         className="bg-slate-800 p-6 rounded-lg mb-8 flex flex-col gap-4 max-w-lg"
       >
-        <h3 className="text-lg font-semibold">Add New Owner</h3>
+        <h3 className="text-lg font-semibold">Add New Customer</h3>
 
         {formError && (
           <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">
@@ -120,7 +120,7 @@ function VehicleOwners() {
           disabled={submitting}
           className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold py-2 rounded transition"
         >
-          {submitting ? "Adding..." : "Add Owner"}
+          {submitting ? "Adding..." : "Add Customer"}
         </button>
       </form>
 
@@ -138,15 +138,15 @@ function VehicleOwners() {
             </tr>
           </thead>
           <tbody>
-            {owners.map((o) => (
-              <tr key={o.owner_no} className="border-b border-slate-800 hover:bg-slate-800/50">
-                <td className="py-2 pr-4">{o.owner_no}</td>
-                <td className="py-2 pr-4">{o.owner_name}</td>
-                <td className="py-2 pr-4">{o.owner_phone}</td>
-                <td className="py-2 pr-4">{o.owner_email}</td>
+            {customers.map((c) => (
+              <tr key={c.cust_no} className="border-b border-slate-800 hover:bg-slate-800/50">
+                <td className="py-2 pr-4">{c.cust_no}</td>
+                <td className="py-2 pr-4">{c.cust_name}</td>
+                <td className="py-2 pr-4">{c.cust_phone}</td>
+                <td className="py-2 pr-4">{c.cust_email}</td>
                 <td className="py-2 pr-4">
                   <button
-                    onClick={() => handleDelete(o.owner_no)}
+                    onClick={() => handleDelete(c.cust_no)}
                     className="text-red-400 hover:text-red-300 text-sm"
                   >
                     Delete
@@ -161,4 +161,4 @@ function VehicleOwners() {
   );
 }
 
-export default VehicleOwners;
+export default Customers;

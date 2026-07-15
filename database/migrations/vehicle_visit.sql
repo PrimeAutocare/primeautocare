@@ -1,27 +1,28 @@
 -- =====================================================
 -- File:        vehicle_visit.sql
 -- Purpose:     Creates the VEHICLE_VISIT table for PrimeAutocare
--- Depends on:  vehicle.sql
+-- Depends on:  VEHICLE
 -- Author:      Senuka Wijerathna
 -- Created:     2026-07-01
 -- =====================================================
 
 DROP TABLE IF EXISTS VEHICLE_VISIT CASCADE;
-
+DROP SEQUENCE IF EXISTS vehicle_visit_seq CASCADE;
+CREATE SEQUENCE vehicle_visit_seq;
 CREATE TABLE VEHICLE_VISIT (
-    visit_id           INTEGER GENERATED ALWAYS AS IDENTITY CONSTRAINT vehicle_visit_pk PRIMARY KEY,
-    vehi_id            INTEGER NOT NULL,
-    visit_check_in_dt  DATE    NOT NULL,
+    visit_id           VARCHAR(6) CONSTRAINT vehicle_visit_pk PRIMARY KEY
+                                  DEFAULT 'VI' || LPAD(NEXTVAL('vehicle_visit_seq')::TEXT, 4, '0'),
+    vehi_id            VARCHAR(6) NOT NULL,
+    visit_check_in_dt  DATE       NOT NULL,
     visit_check_out_dt DATE,
-    visit_status       CHAR(1) NOT NULL
+    visit_status       CHAR(1)    NOT NULL
 );
-
-COMMENT ON COLUMN VEHICLE_VISIT.visit_id           IS 'Unique visit identifier (auto-generated)';
+ALTER SEQUENCE vehicle_visit_seq OWNED BY VEHICLE_VISIT.visit_id;
+COMMENT ON COLUMN VEHICLE_VISIT.visit_id           IS 'Unique visit code — VI + 4 digits (e.g. VI0001)';
 COMMENT ON COLUMN VEHICLE_VISIT.vehi_id            IS 'Reference to the VEHICLE being serviced';
 COMMENT ON COLUMN VEHICLE_VISIT.visit_check_in_dt  IS 'Date the vehicle was checked in for service';
-COMMENT ON COLUMN VEHICLE_VISIT.visit_check_out_dt IS 'Date the vehicle was collected by the owner; NULL until the vehicle is picked up';
+COMMENT ON COLUMN VEHICLE_VISIT.visit_check_out_dt IS 'Date the vehicle was collected by the customer; NULL until the vehicle is picked up';
 COMMENT ON COLUMN VEHICLE_VISIT.visit_status       IS 'Visit status: C = Checked-In, I = In-progress, D = Done, O = Out / Picked Up';
-
-ALTER TABLE VEHICLE_VISIT ALTER COLUMN visit_id ADD GENERATED ALWAYS AS IDENTITY;
 ALTER TABLE VEHICLE_VISIT ADD CONSTRAINT vehicle_vehicle_visit_fk FOREIGN KEY (vehi_id) REFERENCES VEHICLE (vehi_id);
 ALTER TABLE VEHICLE_VISIT ADD CONSTRAINT visit_status_chk CHECK (visit_status IN ('C', 'I', 'D', 'O'));
+ALTER TABLE VEHICLE_VISIT ADD CONSTRAINT visit_id_fmt_chk CHECK (visit_id ~ '^VI[0-9]{4}$');

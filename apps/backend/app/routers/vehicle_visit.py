@@ -23,7 +23,7 @@ def create_vehicle_visit(visit: VehicleVisitCreate, db: Session = Depends(get_db
     return new_visit
 
 @router.patch("/vehicle-visits/{visit_id}", response_model=VehicleVisitResponse)
-def update_vehicle_visit(visit_id: int, visit_update: VehicleVisitUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
+def update_vehicle_visit(visit_id: str, visit_update: VehicleVisitUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
     visit = db.query(VehicleVisit).filter(VehicleVisit.visit_id == visit_id).first()
     if not visit:
         raise HTTPException(status_code=404, detail="Vehicle visit not found")
@@ -37,7 +37,7 @@ def update_vehicle_visit(visit_id: int, visit_update: VehicleVisitUpdate, db: Se
     return visit
 
 @router.delete("/vehicle-visits/{visit_id}", status_code=204)
-def delete_vehicle_visit(visit_id: int, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A", "S"))):
+def delete_vehicle_visit(visit_id: str, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A", "S"))):
     visit = db.query(VehicleVisit).filter(VehicleVisit.visit_id == visit_id).first()
     if not visit:
         raise HTTPException(status_code=404, detail="Vehicle visit not found")

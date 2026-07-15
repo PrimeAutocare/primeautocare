@@ -23,7 +23,7 @@ def create_job(job: JobCreate, db: Session = Depends(get_db), current_employee: 
     return new_job
 
 @router.patch("/jobs/{job_no}", response_model=JobResponse)
-def update_job(job_no: int, job_update: JobUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A", "S"))):
+def update_job(job_no: str, job_update: JobUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A", "S"))):
     job = db.query(Job).filter(Job.job_no == job_no).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
@@ -37,7 +37,7 @@ def update_job(job_no: int, job_update: JobUpdate, db: Session = Depends(get_db)
     return job
 
 @router.delete("/jobs/{job_no}", status_code=204)
-def delete_job(job_no: int, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A"))):
+def delete_job(job_no: str, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A"))):
     job = db.query(Job).filter(Job.job_no == job_no).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")

@@ -48,7 +48,7 @@ function VehicleVisits() {
     setSubmitting(true);
     try {
       await post("/vehicle-visits", {
-        vehi_id: Number(vehiId),
+        vehi_id: vehiId,
         visit_check_in_dt: new Date().toISOString().split("T")[0],
         visit_status: "C",
       });

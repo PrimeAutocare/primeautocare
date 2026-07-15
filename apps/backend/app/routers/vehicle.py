@@ -23,7 +23,7 @@ def create_vehicle(vehicle: VehicleCreate, db: Session = Depends(get_db), curren
     return new_vehicle
 
 @router.patch("/vehicles/{vehi_id}", response_model=VehicleResponse)
-def update_vehicle(vehi_id: int, vehicle_update: VehicleUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
+def update_vehicle(vehi_id: str, vehicle_update: VehicleUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
     vehicle = db.query(Vehicle).filter(Vehicle.vehi_id == vehi_id).first()
     if not vehicle:
         raise HTTPException(status_code=404, detail="Vehicle not found")
@@ -37,7 +37,7 @@ def update_vehicle(vehi_id: int, vehicle_update: VehicleUpdate, db: Session = De
     return vehicle
 
 @router.delete("/vehicles/{vehi_id}", status_code=204)
-def delete_vehicle(vehi_id: int, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A"))):
+def delete_vehicle(vehi_id: str, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A"))):
     vehicle = db.query(Vehicle).filter(Vehicle.vehi_id == vehi_id).first()
     if not vehicle:
         raise HTTPException(status_code=404, detail="Vehicle not found")

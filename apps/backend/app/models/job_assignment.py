@@ -1,13 +1,13 @@
-from sqlalchemy import Column, Integer, CHAR, Date, Numeric, String, ForeignKey
+from sqlalchemy import Column, String, CHAR, Date, Numeric, ForeignKey, FetchedValue
 from app.database import Base
 
 class JobAssignment(Base):
     __tablename__ = "job_assignment"
 
-    jobassign_id = Column(Integer, primary_key=True)
-    visit_id = Column(Integer, ForeignKey("vehicle_visit.visit_id"), nullable=False)
-    job_no = Column(Integer, ForeignKey("job.job_no"), nullable=False)
-    jobassign_assigned_by = Column(Integer, ForeignKey("employee.emp_no"), nullable=False)
+    jobassign_id = Column(String(6), primary_key=True, server_default=FetchedValue())
+    visit_id = Column(String(6), ForeignKey("vehicle_visit.visit_id"), nullable=False)
+    job_no = Column(String(6), ForeignKey("job.job_no"), nullable=False)
+    jobassign_assigned_by = Column(String(6), ForeignKey("employee.emp_no"), nullable=False)
     jobassign_assign_dt = Column(Date, nullable=False)
     jobassign_start_dt = Column(Date, nullable=True)
     jobassign_complete_dt = Column(Date, nullable=True)

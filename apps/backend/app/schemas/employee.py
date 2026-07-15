@@ -12,7 +12,7 @@ class EmployeeCreate(BaseModel):
     emp_create_dt: date
 
 class EmployeeResponse(BaseModel):
-    emp_no: int
+    emp_no: str
     emp_gname: str
     emp_fname: str
     emp_phone: str

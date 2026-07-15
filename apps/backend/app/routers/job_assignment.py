@@ -23,7 +23,7 @@ def create_job_assignment(assignment: JobAssignmentCreate, db: Session = Depends
     return new_assignment
 
 @router.patch("/job-assignments/{jobassign_id}", response_model=JobAssignmentResponse)
-def update_job_assignment(jobassign_id: int, assignment_update: JobAssignmentUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
+def update_job_assignment(jobassign_id: str, assignment_update: JobAssignmentUpdate, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
     assignment = db.query(JobAssignment).filter(JobAssignment.jobassign_id == jobassign_id).first()
     if not assignment:
         raise HTTPException(status_code=404, detail="Job assignment not found")
@@ -37,7 +37,7 @@ def update_job_assignment(jobassign_id: int, assignment_update: JobAssignmentUpd
     return assignment
 
 @router.delete("/job-assignments/{jobassign_id}", status_code=204)
-def delete_job_assignment(jobassign_id: int, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A", "S"))):
+def delete_job_assignment(jobassign_id: str, db: Session = Depends(get_db), current_employee: Employee = Depends(require_role("A", "S"))):
     assignment = db.query(JobAssignment).filter(JobAssignment.jobassign_id == jobassign_id).first()
     if not assignment:
         raise HTTPException(status_code=404, detail="Job assignment not found")

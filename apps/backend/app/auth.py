@@ -50,7 +50,7 @@ def get_current_employee(request: Request, db: Session = Depends(get_db)) -> Emp
     except JWTError:
         raise credentials_exception
 
-    employee = db.query(Employee).filter(Employee.emp_no == int(emp_no)).first()
+    employee = db.query(Employee).filter(Employee.emp_no == emp_no).first()
     if employee is None:
         raise credentials_exception
 

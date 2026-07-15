@@ -1,6 +1,6 @@
 # PrimeAutocare
 
-A vehicle service center management system: tracks owners, vehicles, service
+A vehicle service center management system: tracks customers, vehicles, service
 visits, and the job assignments performed on each visit.
 
 ## Structure

@@ -9,7 +9,7 @@ function Layout() {
     { to: "/job-assignments", label: "Job Assignments" },
     { to: "/vehicles", label: "Vehicles" },
     { to: "/vehicle-visits", label: "Visits" },
-    { to: "/vehicle-owners", label: "Owners" },
+    { to: "/customers", label: "Customers" },
     { to: "/employees", label: "Employees" },
     { to: "/jobs", label: "Job Catalog" },
   ];

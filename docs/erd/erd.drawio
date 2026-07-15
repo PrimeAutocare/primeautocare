@@ -15,7 +15,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-5" parent="YvyTeLvPTCKZTYClq1NU-3" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="emp_no&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;NUMBER(4)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-5" parent="YvyTeLvPTCKZTYClq1NU-3" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="emp_no&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="210" x="40" as="geometry">
             <mxRectangle height="30" width="210" as="alternateBounds" />
           </mxGeometry>
@@ -122,7 +122,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-27" parent="YvyTeLvPTCKZTYClq1NU-25" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="vehi_id&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;NUMBER(5)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-27" parent="YvyTeLvPTCKZTYClq1NU-25" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="vehi_id&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="200" x="40" as="geometry">
             <mxRectangle height="30" width="200" as="alternateBounds" />
           </mxGeometry>
@@ -135,7 +135,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-30" parent="YvyTeLvPTCKZTYClq1NU-28" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="owner_no&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;NUMBER(4)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-30" parent="YvyTeLvPTCKZTYClq1NU-28" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="cust_no&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="200" x="40" as="geometry">
             <mxRectangle height="30" width="200" as="alternateBounds" />
           </mxGeometry>
@@ -203,7 +203,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-46" parent="YvyTeLvPTCKZTYClq1NU-44" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="job_no&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;NUMBER(2)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-46" parent="YvyTeLvPTCKZTYClq1NU-44" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="job_no&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="190" x="40" as="geometry">
             <mxRectangle height="30" width="190" as="alternateBounds" />
           </mxGeometry>
@@ -232,7 +232,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-53" parent="YvyTeLvPTCKZTYClq1NU-51" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="jobassign_id&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&amp;nbsp; &amp;nbsp; NUMBER(5)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-53" parent="YvyTeLvPTCKZTYClq1NU-51" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="jobassign_id&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&amp;nbsp; &amp;nbsp; VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="247" x="40" as="geometry">
             <mxRectangle height="30" width="247" as="alternateBounds" />
           </mxGeometry>
@@ -245,7 +245,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-56" parent="YvyTeLvPTCKZTYClq1NU-54" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="visit_id&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&amp;nbsp; &amp;nbsp; NUMBER(5)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-56" parent="YvyTeLvPTCKZTYClq1NU-54" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="visit_id&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&amp;nbsp; &amp;nbsp; VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="247" x="40" as="geometry">
             <mxRectangle height="30" width="247" as="alternateBounds" />
           </mxGeometry>
@@ -258,7 +258,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-59" parent="YvyTeLvPTCKZTYClq1NU-57" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="job_no&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;NUMBER(2)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-59" parent="YvyTeLvPTCKZTYClq1NU-57" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="job_no&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="247" x="40" as="geometry">
             <mxRectangle height="30" width="247" as="alternateBounds" />
           </mxGeometry>
@@ -271,7 +271,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-62" parent="YvyTeLvPTCKZTYClq1NU-60" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="jobassign_assigned_by&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;NUMBER(4)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-62" parent="YvyTeLvPTCKZTYClq1NU-60" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="jobassign_assigned_by&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="247" x="40" as="geometry">
             <mxRectangle height="30" width="247" as="alternateBounds" />
           </mxGeometry>
@@ -365,7 +365,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-84" parent="YvyTeLvPTCKZTYClq1NU-82" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="visit_id &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; NUMBER(5)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-84" parent="YvyTeLvPTCKZTYClq1NU-82" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="visit_id &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="210" x="40" as="geometry">
             <mxRectangle height="30" width="210" as="alternateBounds" />
           </mxGeometry>
@@ -378,7 +378,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-87" parent="YvyTeLvPTCKZTYClq1NU-85" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="vehi_id&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; NUMBER(5)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-87" parent="YvyTeLvPTCKZTYClq1NU-85" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="vehi_id&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="210" x="40" as="geometry">
             <mxRectangle height="30" width="210" as="alternateBounds" />
           </mxGeometry>
@@ -462,7 +462,7 @@
             <mxPoint x="900" y="460" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-101" parent="YvyTeLvPTCKZTYClq1NU-1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" value="VEHICLE_OWNER" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-101" parent="YvyTeLvPTCKZTYClq1NU-1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" value="CUSTOMER" vertex="1">
           <mxGeometry height="150" width="250" x="470" y="770" as="geometry" />
         </mxCell>
         <mxCell id="YvyTeLvPTCKZTYClq1NU-102" parent="YvyTeLvPTCKZTYClq1NU-101" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" value="" vertex="1">
@@ -473,7 +473,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-104" parent="YvyTeLvPTCKZTYClq1NU-102" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="owner_no&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;NUMBER(4)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-104" parent="YvyTeLvPTCKZTYClq1NU-102" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="cust_no&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(6)" vertex="1">
           <mxGeometry height="30" width="210" x="40" as="geometry">
             <mxRectangle height="30" width="210" as="alternateBounds" />
           </mxGeometry>
@@ -486,7 +486,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-107" parent="YvyTeLvPTCKZTYClq1NU-105" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="owner_name&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(30)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-107" parent="YvyTeLvPTCKZTYClq1NU-105" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="cust_name&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(30)" vertex="1">
           <mxGeometry height="30" width="210" x="40" as="geometry">
             <mxRectangle height="30" width="210" as="alternateBounds" />
           </mxGeometry>
@@ -499,7 +499,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-110" parent="YvyTeLvPTCKZTYClq1NU-108" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="owner_phone&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(13)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-110" parent="YvyTeLvPTCKZTYClq1NU-108" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="cust_phone&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(13)" vertex="1">
           <mxGeometry height="30" width="210" x="40" as="geometry">
             <mxRectangle height="30" width="210" as="alternateBounds" />
           </mxGeometry>
@@ -512,7 +512,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="YvyTeLvPTCKZTYClq1NU-113" parent="YvyTeLvPTCKZTYClq1NU-111" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="owner_email&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(30)" vertex="1">
+        <mxCell id="YvyTeLvPTCKZTYClq1NU-113" parent="YvyTeLvPTCKZTYClq1NU-111" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="cust_email&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;VARCHAR(30)" vertex="1">
           <mxGeometry height="30" width="210" x="40" as="geometry">
             <mxRectangle height="30" width="210" as="alternateBounds" />
           </mxGeometry>
@@ -655,7 +655,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FflEok8oGVm9bjC_9sAA-171" parent="FflEok8oGVm9bjC_9sAA-169" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="owner_no" vertex="1">
+        <mxCell id="FflEok8oGVm9bjC_9sAA-171" parent="FflEok8oGVm9bjC_9sAA-169" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="cust_no" vertex="1">
           <mxGeometry height="30" width="190" x="40" as="geometry">
             <mxRectangle height="30" width="190" as="alternateBounds" />
           </mxGeometry>
@@ -974,7 +974,7 @@
             <mxPoint x="900" y="460" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FflEok8oGVm9bjC_9sAA-137" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" value="VEHICLE_OWNER" vertex="1">
+        <mxCell id="FflEok8oGVm9bjC_9sAA-137" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" value="CUSTOMER" vertex="1">
           <mxGeometry height="150" width="230" x="470" y="750" as="geometry" />
         </mxCell>
         <mxCell id="FflEok8oGVm9bjC_9sAA-138" parent="FflEok8oGVm9bjC_9sAA-137" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" value="" vertex="1">
@@ -985,7 +985,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FflEok8oGVm9bjC_9sAA-140" parent="FflEok8oGVm9bjC_9sAA-138" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="owner_no" vertex="1">
+        <mxCell id="FflEok8oGVm9bjC_9sAA-140" parent="FflEok8oGVm9bjC_9sAA-138" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="cust_no" vertex="1">
           <mxGeometry height="30" width="190" x="40" as="geometry">
             <mxRectangle height="30" width="190" as="alternateBounds" />
           </mxGeometry>
@@ -998,7 +998,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FflEok8oGVm9bjC_9sAA-155" parent="FflEok8oGVm9bjC_9sAA-153" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="owner_name" vertex="1">
+        <mxCell id="FflEok8oGVm9bjC_9sAA-155" parent="FflEok8oGVm9bjC_9sAA-153" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="cust_name" vertex="1">
           <mxGeometry height="30" width="190" x="40" as="geometry">
             <mxRectangle height="30" width="190" as="alternateBounds" />
           </mxGeometry>
@@ -1011,7 +1011,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FflEok8oGVm9bjC_9sAA-158" parent="FflEok8oGVm9bjC_9sAA-156" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="owner_phone" vertex="1">
+        <mxCell id="FflEok8oGVm9bjC_9sAA-158" parent="FflEok8oGVm9bjC_9sAA-156" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="cust_phone" vertex="1">
           <mxGeometry height="30" width="190" x="40" as="geometry">
             <mxRectangle height="30" width="190" as="alternateBounds" />
           </mxGeometry>
@@ -1024,7 +1024,7 @@
             <mxRectangle height="30" width="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FflEok8oGVm9bjC_9sAA-161" parent="FflEok8oGVm9bjC_9sAA-159" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="owner_email" vertex="1">
+        <mxCell id="FflEok8oGVm9bjC_9sAA-161" parent="FflEok8oGVm9bjC_9sAA-159" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" value="cust_email" vertex="1">
           <mxGeometry height="30" width="190" x="40" as="geometry">
             <mxRectangle height="30" width="190" as="alternateBounds" />
           </mxGeometry>

@@ -4,9 +4,9 @@ from typing import Optional
 from decimal import Decimal
 
 class JobAssignmentCreate(BaseModel):
-    visit_id: int
-    job_no: int
-    jobassign_assigned_by: int
+    visit_id: str
+    job_no: str
+    jobassign_assigned_by: str
     jobassign_assign_dt: date
     jobassign_start_dt: Optional[date] = None
     jobassign_complete_dt: Optional[date] = None
@@ -15,10 +15,10 @@ class JobAssignmentCreate(BaseModel):
     jobassign_notes: Optional[str] = None
 
 class JobAssignmentResponse(BaseModel):
-    jobassign_id: int
-    visit_id: int
-    job_no: int
-    jobassign_assigned_by: int
+    jobassign_id: str
+    visit_id: str
+    job_no: str
+    jobassign_assigned_by: str
     jobassign_assign_dt: date
     jobassign_start_dt: Optional[date] = None
     jobassign_complete_dt: Optional[date] = None

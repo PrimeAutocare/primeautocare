@@ -2,15 +2,15 @@ from pydantic import BaseModel
 from typing import Optional
 
 class VehicleCreate(BaseModel):
-    owner_no: int
+    cust_no: str
     vehi_license: str
     vehi_make: str
     vehi_model: str
     vehi_year: int
 
 class VehicleResponse(BaseModel):
-    vehi_id: int
-    owner_no: int
+    vehi_id: str
+    cust_no: str
     vehi_license: str
     vehi_make: str
     vehi_model: str
@@ -20,7 +20,7 @@ class VehicleResponse(BaseModel):
         from_attributes = True
 
 class VehicleUpdate(BaseModel):
-    owner_no: Optional[int] = None
+    cust_no: Optional[str] = None
     vehi_license: Optional[str] = None
     vehi_make: Optional[str] = None
     vehi_model: Optional[str] = None

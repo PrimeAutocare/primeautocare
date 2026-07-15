@@ -7,13 +7,14 @@
 -- =====================================================
 
 DROP TABLE IF EXISTS JOB CASCADE;
- 
+DROP SEQUENCE IF EXISTS job_seq CASCADE;
+CREATE SEQUENCE job_seq;
 CREATE TABLE JOB (
-    job_no   INTEGER GENERATED ALWAYS AS IDENTITY CONSTRAINT job_pk PRIMARY KEY,
+    job_no   VARCHAR(6)  CONSTRAINT job_pk PRIMARY KEY
+                         DEFAULT 'JO' || LPAD(NEXTVAL('job_seq')::TEXT, 4, '0'),
     job_desc VARCHAR(60) NOT NULL
 );
-
-COMMENT ON COLUMN JOB.job_no   IS 'Unique job type identifier (auto-generated)';
+ALTER SEQUENCE job_seq OWNED BY JOB.job_no;
+COMMENT ON COLUMN JOB.job_no   IS 'Unique job type code — JO + 4 digits (e.g. JO0001)';
 COMMENT ON COLUMN JOB.job_desc IS 'Description of the service/job type (e.g. Oil Change, Tyre Rotation)';
-
-ALTER TABLE JOB ALTER COLUMN job_no ADD GENERATED ALWAYS AS IDENTITY;
+ALTER TABLE JOB ADD CONSTRAINT job_no_fmt_chk CHECK (job_no ~ '^JO[0-9]{4}$');

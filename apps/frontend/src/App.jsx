@@ -4,7 +4,7 @@ import { useAuth } from "./context/useAuth";
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
-import VehicleOwners from "./pages/VehicleOwners";
+import Customers from "./pages/Customers";
 import Vehicles from "./pages/Vehicles";
 import VehicleVisits from "./pages/VehicleVisits";
 import Employees from "./pages/Employees";
@@ -34,7 +34,7 @@ function App() {
           <Route path="job-assignments" element={<JobAssignments />} />
           <Route path="vehicles" element={<Vehicles />} />
           <Route path="vehicle-visits" element={<VehicleVisits />} />  
-          <Route path="vehicle-owners" element={<VehicleOwners />} />
+          <Route path="customers" element={<Customers />} />
           <Route path="employees" element={<Employees />} />
           <Route path="jobs" element={<Jobs />} />
           <Route path="*" element={<Navigate to="/" replace />} />

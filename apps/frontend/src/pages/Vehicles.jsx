@@ -3,13 +3,13 @@ import { get, post, del } from "../api/client";
 
 function Vehicles() {
   const [vehicles, setVehicles] = useState([]);
-  const [owners, setOwners] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const [ownerNo, setOwnerNo] = useState("");
+  const [custNo, setCustNo] = useState("");
   const [license, setLicense] = useState("");
   const [make, setMake] = useState("");
   const [model, setModel] = useState("");
@@ -19,12 +19,12 @@ function Vehicles() {
     setLoading(true);
     setError("");
     try {
-      const [vehiclesData, ownersData] = await Promise.all([
+      const [vehiclesData, customersData] = await Promise.all([
         get("/vehicles"),
-        get("/vehicle-owners"),
+        get("/customers"),
       ]);
       setVehicles(vehiclesData);
-      setOwners(ownersData);
+      setCustomers(customersData);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -44,13 +44,13 @@ function Vehicles() {
     setSubmitting(true);
     try {
       await post("/vehicles", {
-        owner_no: Number(ownerNo),
+        cust_no: custNo,
         vehi_license: license,
         vehi_make: make,
         vehi_model: model,
         vehi_year: Number(year),
       });
-      setOwnerNo("");
+      setCustNo("");
       setLicense("");
       setMake("");
       setModel("");
@@ -74,9 +74,9 @@ function Vehicles() {
     }
   }
 
-  function ownerName(ownerNo) {
-    const owner = owners.find((o) => o.owner_no === ownerNo);
-    return owner ? owner.owner_name : `#${ownerNo}`;
+  function customerName(custNo) {
+    const customer = customers.find((c) => c.cust_no === custNo);
+    return customer ? customer.cust_name : custNo;
   }
 
   if (loading) return <p className="text-slate-400">Loading...</p>;
@@ -98,17 +98,17 @@ function Vehicles() {
         )}
 
         <div>
-          <label className="block text-slate-300 text-sm mb-1">Owner</label>
+          <label className="block text-slate-300 text-sm mb-1">Customer</label>
           <select
-            value={ownerNo}
-            onChange={(e) => setOwnerNo(e.target.value)}
+            value={custNo}
+            onChange={(e) => setCustNo(e.target.value)}
             className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
             required
           >
-            <option value="" disabled>Select an owner</option>
-            {owners.map((o) => (
-              <option key={o.owner_no} value={o.owner_no}>
-                {o.owner_name}
+            <option value="" disabled>Select a customer</option>
+            {customers.map((c) => (
+              <option key={c.cust_no} value={c.cust_no}>
+                {c.cust_name}
               </option>
             ))}
           </select>
@@ -180,7 +180,7 @@ function Vehicles() {
               <th className="py-2 pr-4">Make</th>
               <th className="py-2 pr-4">Model</th>
               <th className="py-2 pr-4">Year</th>
-              <th className="py-2 pr-4">Owner</th>
+              <th className="py-2 pr-4">Customer</th>
               <th className="py-2 pr-4"></th>
             </tr>
           </thead>
@@ -192,7 +192,7 @@ function Vehicles() {
                 <td className="py-2 pr-4">{v.vehi_make}</td>
                 <td className="py-2 pr-4">{v.vehi_model}</td>
                 <td className="py-2 pr-4">{v.vehi_year}</td>
-                <td className="py-2 pr-4">{ownerName(v.owner_no)}</td>
+                <td className="py-2 pr-4">{customerName(v.cust_no)}</td>
                 <td className="py-2 pr-4">
                   <button
                     onClick={() => handleDelete(v.vehi_id)}

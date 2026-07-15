@@ -1,22 +1,30 @@
 import { useEffect, useState } from "react";
 import { get, post, patch } from "../api/client";
 import { useAuth } from "../context/useAuth";
+import Modal from "../components/Modal";
 
 function JobAssignments() {
   const { employee } = useAuth();
   const [assignments, setAssignments] = useState([]);
   const [visits, setVisits] = useState([]);
   const [jobs, setJobs] = useState([]);
-  const [technicians, setTechnicians] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [updatingId, setUpdatingId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const [visitId, setVisitId] = useState("");
   const [jobNo, setJobNo] = useState("");
   const [notes, setNotes] = useState("");
+
+  // status-change modal state
+  const [statusModal, setStatusModal] = useState(null); // { id, newStatus } or null
+  const [performedBy, setPerformedBy] = useState("");
+  const [hours, setHours] = useState("");
+  const [statusError, setStatusError] = useState("");
+  const [statusSubmitting, setStatusSubmitting] = useState(false);
 
   const STATUS_OPTIONS = [
     { value: "P", label: "Pending" },
@@ -24,6 +32,10 @@ function JobAssignments() {
     { value: "C", label: "Completed" },
     { value: "X", label: "Cancelled" },
   ];
+
+  useEffect(() => {
+    loadAll();
+  }, []);
 
   async function loadAll() {
     setLoading(true);
@@ -38,7 +50,7 @@ function JobAssignments() {
       setAssignments(assignmentsData);
       setVisits(visitsData);
       setJobs(jobsData);
-      setTechnicians(employeesData.filter((e) => e.emp_role === "T"));
+      setEmployees(employeesData);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -46,17 +58,10 @@ function JobAssignments() {
     }
   }
 
-  useEffect(() => {
-    (async () => {
-      await loadAll();
-    })();
-  }, []);
-
   async function handleSubmit(e) {
     e.preventDefault();
     setFormError("");
     setSubmitting(true);
-
     try {
       await post("/job-assignments", {
         visit_id: visitId,
@@ -66,10 +71,10 @@ function JobAssignments() {
         jobassign_status: "P",
         jobassign_notes: notes || null,
       });
-
       setVisitId("");
       setJobNo("");
       setNotes("");
+      setShowModal(false);
       await loadAll();
     } catch (err) {
       setFormError(err.message);
@@ -78,137 +83,81 @@ function JobAssignments() {
     }
   }
 
-  async function handleStatusChange(assignment, newStatus) {
-    const jobassignId = assignment.jobassign_id;
+  function onStatusSelect(id, newStatus) {
+    if (newStatus === "I" || newStatus === "C") {
+      // needs performed_by (and hours if completing) — open modal
+      setStatusModal({ id, newStatus });
+      setPerformedBy("");
+      setHours("");
+      setStatusError("");
+    } else {
+      applyStatusChange(id, { jobassign_status: newStatus });
+    }
+  }
+
+  async function applyStatusChange(id, payload) {
     setError("");
-
-    // The database rejects started work with no technician, and completed work
-    // with no hours. Catch it here so the user gets a usable message.
-    if ((newStatus === "I" || newStatus === "C") && !assignment.jobassign_performed_by) {
-      setError(`Assign a technician to ${jobassignId} before marking it ${newStatus === "I" ? "in-progress" : "completed"}.`);
-      return;
+    try {
+      await patch(`/job-assignments/${id}`, payload);
+      await loadAll();
+    } catch (err) {
+      setError(err.message);
     }
-    if (newStatus === "C" && !assignment.jobassign_hours) {
-      setError(`Log the hours worked on ${jobassignId} before marking it completed.`);
-      return;
-    }
+  }
 
-    setUpdatingId(jobassignId);
+  async function handleStatusModalSubmit(e) {
+    e.preventDefault();
+    setStatusError("");
+    setStatusSubmitting(true);
     const today = new Date().toISOString().split("T")[0];
-    const updatePayload = { jobassign_status: newStatus };
-
-    if (newStatus === "I") {
-      updatePayload.jobassign_start_dt = today;
+    const payload = {
+      jobassign_status: statusModal.newStatus,
+      jobassign_performed_by: performedBy,
+    };
+    if (statusModal.newStatus === "I") payload.jobassign_start_dt = today;
+    if (statusModal.newStatus === "C") {
+      payload.jobassign_complete_dt = today;
+      payload.jobassign_hours = Number(hours);
     }
-    if (newStatus === "C") {
-      updatePayload.jobassign_complete_dt = today;
-    }
-
     try {
-      await patch(`/job-assignments/${jobassignId}`, updatePayload);
+      await patch(`/job-assignments/${statusModal.id}`, payload);
+      setStatusModal(null);
       await loadAll();
     } catch (err) {
-      setError(err.message);
+      setStatusError(err.message);
     } finally {
-      setUpdatingId(null);
+      setStatusSubmitting(false);
     }
   }
 
-  async function handleFieldChange(jobassignId, field, value) {
-    setUpdatingId(jobassignId);
-    setError("");
-    try {
-      await patch(`/job-assignments/${jobassignId}`, { [field]: value || null });
-      await loadAll();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setUpdatingId(null);
-    }
+  function employeeName(no) {
+    const e = employees.find((e) => e.emp_no === no);
+    return e ? `${e.emp_gname} ${e.emp_fname}` : no;
   }
 
-  if (loading) return <p className="text-slate-400">Loading...</p>;
+  if (loading) return <p className="text-zinc-400">Loading...</p>;
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Job Assignments</h2>
-
-      <form
-        onSubmit={handleSubmit}
-        className="bg-slate-800 p-6 rounded-lg mb-8 flex flex-col gap-4 max-w-lg"
-      >
-        <h3 className="text-lg font-semibold">Assign a Job</h3>
-
-        {formError && (
-          <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">
-            {formError}
-          </p>
-        )}
-
-        <div>
-          <label className="block text-slate-300 text-sm mb-1">Vehicle Visit</label>
-          <select
-            value={visitId}
-            onChange={(e) => setVisitId(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          >
-            <option value="" disabled>Select a visit</option>
-            {visits.map((v) => (
-              <option key={v.visit_id} value={v.visit_id}>
-                Visit #{v.visit_id} — Vehicle #{v.vehi_id} (checked in {v.visit_check_in_dt})
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-slate-300 text-sm mb-1">Job</label>
-          <select
-            value={jobNo}
-            onChange={(e) => setJobNo(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          >
-            <option value="" disabled>Select a job</option>
-            {jobs.map((j) => (
-              <option key={j.job_no} value={j.job_no}>
-                {j.job_desc}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-slate-300 text-sm mb-1">Notes (optional)</label>
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-            rows={2}
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold py-2 rounded transition"
-        >
-          {submitting ? "Assigning..." : "Assign Job"}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-white">Job Assignments</h2>
+        <button onClick={() => setShowModal(true)}
+          className="bg-orange-600 hover:bg-orange-500 text-white font-semibold px-4 py-2 rounded transition">
+          + Assign Job
         </button>
-      </form>
+      </div>
 
       {error && <p className="text-red-400 mb-4">{error}</p>}
 
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-700 text-slate-400 text-sm">
+            <tr className="border-b border-zinc-700 text-zinc-400 text-sm">
               <th className="py-2 pr-4">ID</th>
               <th className="py-2 pr-4">Visit</th>
               <th className="py-2 pr-4">Job</th>
               <th className="py-2 pr-4">Assigned By</th>
-              <th className="py-2 pr-4">Technician</th>
+              <th className="py-2 pr-4">Performed By</th>
               <th className="py-2 pr-4">Hours</th>
               <th className="py-2 pr-4">Status</th>
               <th className="py-2 pr-4">Cost</th>
@@ -217,63 +166,86 @@ function JobAssignments() {
           </thead>
           <tbody>
             {assignments.map((a) => (
-              <tr key={a.jobassign_id} className="border-b border-slate-800 hover:bg-slate-800/50">
-                <td className="py-2 pr-4">{a.jobassign_id}</td>
-                <td className="py-2 pr-4">{a.visit_id}</td>
-                <td className="py-2 pr-4">{a.job_no}</td>
-                <td className="py-2 pr-4">{a.jobassign_assigned_by}</td>
+              <tr key={a.jobassign_id} className="border-b border-zinc-800 hover:bg-zinc-800/50">
+                <td className="py-2 pr-4 text-white">{a.jobassign_id}</td>
+                <td className="py-2 pr-4 text-zinc-300">{a.visit_id}</td>
+                <td className="py-2 pr-4 text-zinc-300">{a.job_no}</td>
+                <td className="py-2 pr-4 text-zinc-300">{employeeName(a.jobassign_assigned_by)}</td>
+                <td className="py-2 pr-4 text-zinc-300">{a.jobassign_performed_by ? employeeName(a.jobassign_performed_by) : "-"}</td>
+                <td className="py-2 pr-4 text-zinc-300">{a.jobassign_hours ?? "-"}</td>
                 <td className="py-2 pr-4">
-                  <select
-                    value={a.jobassign_performed_by ?? ""}
-                    disabled={updatingId === a.jobassign_id}
-                    onChange={(e) => handleFieldChange(a.jobassign_id, "jobassign_performed_by", e.target.value)}
-                    className="bg-slate-700 text-white text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                  >
-                    <option value="">Unassigned</option>
-                    {technicians.map((t) => (
-                      <option key={t.emp_no} value={t.emp_no}>
-                        {t.emp_gname} {t.emp_fname}
-                      </option>
-                    ))}
+                  <select value={a.jobassign_status}
+                    onChange={(e) => onStatusSelect(a.jobassign_id, e.target.value)}
+                    className="bg-zinc-700 text-white text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-orange-500">
+                    {STATUS_OPTIONS.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                   </select>
                 </td>
-                <td className="py-2 pr-4">
-                  <input
-                    type="number"
-                    step="0.25"
-                    min="0"
-                    defaultValue={a.jobassign_hours ?? ""}
-                    disabled={updatingId === a.jobassign_id}
-                    onBlur={(e) => {
-                      const v = e.target.value;
-                      if (v !== (a.jobassign_hours ?? "")) {
-                        handleFieldChange(a.jobassign_id, "jobassign_hours", v);
-                      }
-                    }}
-                    className="w-20 bg-slate-700 text-white text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                  />
-                </td>
-                <td className="py-2 pr-4">
-                  <select
-                    value={a.jobassign_status}
-                    disabled={updatingId === a.jobassign_id}
-                    onChange={(e) => handleStatusChange(a, e.target.value)}
-                    className="bg-slate-700 text-white text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                  >
-                    {STATUS_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="py-2 pr-4">{a.jobassign_cost ?? "-"}</td>
-                <td className="py-2 pr-4">{a.jobassign_notes ?? "-"}</td>
+                <td className="py-2 pr-4 text-zinc-300">{a.jobassign_cost ?? "-"}</td>
+                <td className="py-2 pr-4 text-zinc-300">{a.jobassign_notes ?? "-"}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setFormError(""); }} title="Assign a Job">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {formError && <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">{formError}</p>}
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Vehicle Visit</label>
+            <select value={visitId} onChange={(e) => setVisitId(e.target.value)}
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required>
+              <option value="" disabled>Select a visit</option>
+              {visits.map((v) => <option key={v.visit_id} value={v.visit_id}>Visit {v.visit_id} — Vehicle {v.vehi_id}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Job</label>
+            <select value={jobNo} onChange={(e) => setJobNo(e.target.value)}
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required>
+              <option value="" disabled>Select a job</option>
+              {jobs.map((j) => <option key={j.job_no} value={j.job_no}>{j.job_desc}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Notes (optional)</label>
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2}
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" />
+          </div>
+          <button type="submit" disabled={submitting}
+            className="bg-orange-600 hover:bg-orange-500 disabled:opacity-50 text-white font-semibold py-2 rounded transition">
+            {submitting ? "Assigning..." : "Assign Job"}
+          </button>
+        </form>
+      </Modal>
+
+      <Modal isOpen={!!statusModal} onClose={() => setStatusModal(null)}
+        title={statusModal?.newStatus === "C" ? "Complete Job" : "Start Job"}>
+        {statusModal && (
+          <form onSubmit={handleStatusModalSubmit} className="flex flex-col gap-4">
+            {statusError && <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">{statusError}</p>}
+            <div>
+              <label className="block text-zinc-300 text-sm mb-1">Performed By</label>
+              <select value={performedBy} onChange={(e) => setPerformedBy(e.target.value)}
+                className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required>
+                <option value="" disabled>Select a technician</option>
+                {employees.map((e) => <option key={e.emp_no} value={e.emp_no}>{e.emp_gname} {e.emp_fname}</option>)}
+              </select>
+            </div>
+            {statusModal.newStatus === "C" && (
+              <div>
+                <label className="block text-zinc-300 text-sm mb-1">Hours Worked</label>
+                <input type="number" step="0.01" value={hours} onChange={(e) => setHours(e.target.value)}
+                  className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required />
+              </div>
+            )}
+            <button type="submit" disabled={statusSubmitting}
+              className="bg-orange-600 hover:bg-orange-500 disabled:opacity-50 text-white font-semibold py-2 rounded transition">
+              {statusSubmitting ? "Saving..." : "Confirm"}
+            </button>
+          </form>
+        )}
+      </Modal>
     </div>
   );
 }

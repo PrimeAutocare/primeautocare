@@ -12,7 +12,7 @@ const STATUS_STYLES = {
   U: "text-red-400",
   P: "text-amber-400",
   S: "text-green-400",
-  V: "text-slate-500",
+  V: "text-zinc-500",
 };
 
 const METHOD_LABELS = { C: "Cash", R: "Card", T: "Transfer", Q: "Cheque" };
@@ -46,7 +46,6 @@ function Invoices() {
     })();
   }, []);
 
-  // An invoice can be settled over several payments, so sum them per invoice.
   const paidByInvoice = payments.reduce((acc, p) => {
     acc[p.inv_no] = (acc[p.inv_no] ?? 0) + Number(p.pay_amount);
     return acc;
@@ -60,25 +59,25 @@ function Invoices() {
   const collected = live.reduce((s, i) => s + (paidByInvoice[i.inv_no] ?? 0), 0);
   const outstanding = billed - collected;
 
-  if (loading) return <p className="text-slate-400">Loading...</p>;
+  if (loading) return <p className="text-zinc-400">Loading...</p>;
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Invoices</h2>
+      <h2 className="text-2xl font-bold mb-6 text-white">Invoices</h2>
 
       {error && <p className="text-red-400 mb-4">{error}</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 max-w-3xl">
-        <div className="bg-slate-800 p-4 rounded-lg">
-          <p className="text-slate-400 text-sm">Billed</p>
-          <p className="text-xl font-semibold">{money(billed)}</p>
+        <div className="bg-zinc-800 p-4 rounded-lg">
+          <p className="text-zinc-400 text-sm">Billed</p>
+          <p className="text-xl font-semibold text-white">{money(billed)}</p>
         </div>
-        <div className="bg-slate-800 p-4 rounded-lg">
-          <p className="text-slate-400 text-sm">Collected</p>
+        <div className="bg-zinc-800 p-4 rounded-lg">
+          <p className="text-zinc-400 text-sm">Collected</p>
           <p className="text-xl font-semibold text-green-400">{money(collected)}</p>
         </div>
-        <div className="bg-slate-800 p-4 rounded-lg">
-          <p className="text-slate-400 text-sm">Outstanding</p>
+        <div className="bg-zinc-800 p-4 rounded-lg">
+          <p className="text-zinc-400 text-sm">Outstanding</p>
           <p className="text-xl font-semibold text-amber-400">{money(outstanding)}</p>
         </div>
       </div>
@@ -86,7 +85,7 @@ function Invoices() {
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-700 text-slate-400 text-sm">
+            <tr className="border-b border-zinc-700 text-zinc-400 text-sm">
               <th className="py-2 pr-4">Invoice</th>
               <th className="py-2 pr-4">Visit</th>
               <th className="py-2 pr-4">Date</th>
@@ -106,17 +105,17 @@ function Invoices() {
                 .map((p) => METHOD_LABELS[p.pay_method] ?? p.pay_method)
                 .join(", ");
               return (
-                <tr key={i.inv_no} className="border-b border-slate-800 hover:bg-slate-800/50">
-                  <td className="py-2 pr-4">{i.inv_no}</td>
-                  <td className="py-2 pr-4">{i.visit_id}</td>
-                  <td className="py-2 pr-4">{i.inv_date}</td>
-                  <td className="py-2 pr-4">{money(i.inv_total)}</td>
-                  <td className="py-2 pr-4">{money(paid)}</td>
-                  <td className="py-2 pr-4">{money(balance)}</td>
+                <tr key={i.inv_no} className="border-b border-zinc-800 hover:bg-zinc-800/50">
+                  <td className="py-2 pr-4 text-white">{i.inv_no}</td>
+                  <td className="py-2 pr-4 text-zinc-300">{i.visit_id}</td>
+                  <td className="py-2 pr-4 text-zinc-300">{i.inv_date}</td>
+                  <td className="py-2 pr-4 text-zinc-300">{money(i.inv_total)}</td>
+                  <td className="py-2 pr-4 text-zinc-300">{money(paid)}</td>
+                  <td className="py-2 pr-4 text-zinc-300">{money(balance)}</td>
                   <td className={`py-2 pr-4 ${STATUS_STYLES[i.inv_status] ?? ""}`}>
                     {STATUS_LABELS[i.inv_status] ?? i.inv_status}
                   </td>
-                  <td className="py-2 pr-4 text-slate-400 text-sm">{methods || "-"}</td>
+                  <td className="py-2 pr-4 text-zinc-400 text-sm">{methods || "-"}</td>
                 </tr>
               );
             })}

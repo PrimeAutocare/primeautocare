@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { get, post, del } from "../api/client";
+import { useAuth } from "../context/useAuth";
+import { canManage } from "../context/AuthContext";
+import Modal from "../components/Modal";
 
 function Employees() {
+  const { employee: currentUser } = useAuth();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const [gname, setGname] = useState("");
   const [fname, setFname] = useState("");
@@ -17,6 +22,12 @@ function Employees() {
   const [hourlyRate, setHourlyRate] = useState("");
 
   const ROLE_LABELS = { A: "Admin", S: "Supervisor", T: "Technician" };
+  const canCreate = canManage(currentUser, ["A"]);
+  const canDelete = canManage(currentUser, ["A"]);
+
+  useEffect(() => {
+    loadEmployees();
+  }, []);
 
   async function loadEmployees() {
     setLoading(true);
@@ -31,11 +42,16 @@ function Employees() {
     }
   }
 
-  useEffect(() => {
-    (async () => {
-      await loadEmployees();
-    })();
-  }, []);
+  function resetForm() {
+    setGname("");
+    setFname("");
+    setPhone("");
+    setEmailInput("");
+    setPassword("");
+    setRole("T");
+    setHourlyRate("");
+    setFormError("");
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -50,15 +66,10 @@ function Employees() {
         emp_passhash: password,
         emp_role: role,
         emp_create_dt: new Date().toISOString().split("T")[0],
-        emp_hourly_rate: hourlyRate,
+        emp_hourly_rate: Number(hourlyRate),
       });
-      setGname("");
-      setFname("");
-      setPhone("");
-      setEmailInput("");
-      setPassword("");
-      setRole("T");
-      setHourlyRate("");
+      resetForm();
+      setShowModal(false);
       await loadEmployees();
     } catch (err) {
       setFormError(err.message);
@@ -78,153 +89,114 @@ function Employees() {
     }
   }
 
-  if (loading) return <p className="text-slate-400">Loading...</p>;
+  if (loading) return <p className="text-zinc-400">Loading...</p>;
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Employees</h2>
-
-      <form
-        onSubmit={handleSubmit}
-        className="bg-slate-800 p-6 rounded-lg mb-8 flex flex-col gap-4 max-w-lg"
-      >
-        <h3 className="text-lg font-semibold">Add New Employee</h3>
-
-        {formError && (
-          <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">
-            {formError}
-          </p>
-        )}
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-slate-300 text-sm mb-1">First Name</label>
-            <input
-              type="text"
-              value={gname}
-              onChange={(e) => setGname(e.target.value)}
-              className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-slate-300 text-sm mb-1">Last Name</label>
-            <input
-              type="text"
-              value={fname}
-              onChange={(e) => setFname(e.target.value)}
-              className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-slate-300 text-sm mb-1">Phone</label>
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="+94771234567"
-            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-slate-300 text-sm mb-1">Email</label>
-          <input
-            type="email"
-            value={emailInput}
-            onChange={(e) => setEmailInput(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-slate-300 text-sm mb-1">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-slate-300 text-sm mb-1">Role</label>
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-white">Employees</h2>
+        {canCreate && (
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-orange-600 hover:bg-orange-500 text-white font-semibold px-4 py-2 rounded transition"
           >
-            <option value="T">Technician</option>
-            <option value="S">Supervisor</option>
-            <option value="A">Admin</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-slate-300 text-sm mb-1">Hourly Rate</label>
-          <input
-            type="number"
-            step="0.01"
-            min="0"
-            value={hourlyRate}
-            onChange={(e) => setHourlyRate(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold py-2 rounded transition"
-        >
-          {submitting ? "Adding..." : "Add Employee"}
-        </button>
-      </form>
+            + Add Employee
+          </button>
+        )}
+      </div>
 
       {error && <p className="text-red-400 mb-4">{error}</p>}
 
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-700 text-slate-400 text-sm">
+            <tr className="border-b border-zinc-700 text-zinc-400 text-sm">
               <th className="py-2 pr-4">ID</th>
               <th className="py-2 pr-4">Name</th>
               <th className="py-2 pr-4">Phone</th>
               <th className="py-2 pr-4">Email</th>
               <th className="py-2 pr-4">Role</th>
-              <th className="py-2 pr-4">Hourly Rate</th>
-              <th className="py-2 pr-4"></th>
+              <th className="py-2 pr-4">Rate</th>
+              {canDelete && <th className="py-2 pr-4"></th>}
             </tr>
           </thead>
           <tbody>
             {employees.map((emp) => (
-              <tr key={emp.emp_no} className="border-b border-slate-800 hover:bg-slate-800/50">
-                <td className="py-2 pr-4">{emp.emp_no}</td>
-                <td className="py-2 pr-4">{emp.emp_gname} {emp.emp_fname}</td>
-                <td className="py-2 pr-4">{emp.emp_phone}</td>
-                <td className="py-2 pr-4">{emp.emp_email}</td>
-                <td className="py-2 pr-4">{ROLE_LABELS[emp.emp_role] ?? emp.emp_role}</td>
-                <td className="py-2 pr-4">{emp.emp_hourly_rate ?? "-"}</td>
-                <td className="py-2 pr-4">
-                  <button
-                    onClick={() => handleDelete(emp.emp_no)}
-                    className="text-red-400 hover:text-red-300 text-sm"
-                  >
-                    Delete
-                  </button>
-                </td>
+              <tr key={emp.emp_no} className="border-b border-zinc-800 hover:bg-zinc-800/50">
+                <td className="py-2 pr-4 text-white">{emp.emp_no}</td>
+                <td className="py-2 pr-4 text-white">{emp.emp_gname} {emp.emp_fname}</td>
+                <td className="py-2 pr-4 text-zinc-300">{emp.emp_phone}</td>
+                <td className="py-2 pr-4 text-zinc-300">{emp.emp_email}</td>
+                <td className="py-2 pr-4 text-zinc-300">{ROLE_LABELS[emp.emp_role] ?? emp.emp_role}</td>
+                <td className="py-2 pr-4 text-zinc-300">{emp.emp_hourly_rate}</td>
+                {canDelete && (
+                  <td className="py-2 pr-4">
+                    <button
+                      onClick={() => handleDelete(emp.emp_no)}
+                      className="text-red-400 hover:text-red-300 text-sm"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <Modal isOpen={showModal} onClose={() => { setShowModal(false); resetForm(); }} title="Add New Employee">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {formError && (
+            <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">{formError}</p>
+          )}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-zinc-300 text-sm mb-1">First Name</label>
+              <input type="text" value={gname} onChange={(e) => setGname(e.target.value)}
+                className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required />
+            </div>
+            <div>
+              <label className="block text-zinc-300 text-sm mb-1">Last Name</label>
+              <input type="text" value={fname} onChange={(e) => setFname(e.target.value)}
+                className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required />
+            </div>
+          </div>
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Phone</label>
+            <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+94771234567"
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required />
+          </div>
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Email</label>
+            <input type="email" value={emailInput} onChange={(e) => setEmailInput(e.target.value)}
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required />
+          </div>
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Password</label>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required />
+          </div>
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Role</label>
+            <select value={role} onChange={(e) => setRole(e.target.value)}
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500">
+              <option value="T">Technician</option>
+              <option value="S">Supervisor</option>
+              <option value="A">Admin</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Hourly Rate</label>
+            <input type="number" step="0.01" value={hourlyRate} onChange={(e) => setHourlyRate(e.target.value)}
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required />
+          </div>
+          <button type="submit" disabled={submitting}
+            className="bg-orange-600 hover:bg-orange-500 disabled:opacity-50 text-white font-semibold py-2 rounded transition">
+            {submitting ? "Adding..." : "Add Employee"}
+          </button>
+        </form>
+      </Modal>
     </div>
   );
 }

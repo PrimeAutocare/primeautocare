@@ -17,7 +17,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
+      <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
         Loading...
       </div>
     );
@@ -34,7 +34,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="job-assignments" element={<JobAssignments />} />
           <Route path="vehicles" element={<Vehicles />} />
-          <Route path="vehicle-visits" element={<VehicleVisits />} />  
+          <Route path="vehicle-visits" element={<VehicleVisits />} />
           <Route path="customers" element={<Customers />} />
           <Route path="employees" element={<Employees />} />
           <Route path="jobs" element={<Jobs />} />

@@ -12,6 +12,7 @@ function Layout() {
     { to: "/customers", label: "Customers" },
     { to: "/employees", label: "Employees" },
     { to: "/jobs", label: "Job Catalog" },
+    { to: "/invoices", label: "Invoices" },
   ];
 
   return (

@@ -7,6 +7,7 @@ function JobAssignments() {
   const [assignments, setAssignments] = useState([]);
   const [visits, setVisits] = useState([]);
   const [jobs, setJobs] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
@@ -28,14 +29,16 @@ function JobAssignments() {
     setLoading(true);
     setError("");
     try {
-      const [assignmentsData, visitsData, jobsData] = await Promise.all([
+      const [assignmentsData, visitsData, jobsData, employeesData] = await Promise.all([
         get("/job-assignments"),
         get("/vehicle-visits"),
         get("/jobs"),
+        get("/employees"),
       ]);
       setAssignments(assignmentsData);
       setVisits(visitsData);
       setJobs(jobsData);
+      setTechnicians(employeesData.filter((e) => e.emp_role === "T"));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -75,10 +78,22 @@ function JobAssignments() {
     }
   }
 
-  async function handleStatusChange(jobassignId, newStatus) {
-    setUpdatingId(jobassignId);
+  async function handleStatusChange(assignment, newStatus) {
+    const jobassignId = assignment.jobassign_id;
     setError("");
 
+    // The database rejects started work with no technician, and completed work
+    // with no hours. Catch it here so the user gets a usable message.
+    if ((newStatus === "I" || newStatus === "C") && !assignment.jobassign_performed_by) {
+      setError(`Assign a technician to ${jobassignId} before marking it ${newStatus === "I" ? "in-progress" : "completed"}.`);
+      return;
+    }
+    if (newStatus === "C" && !assignment.jobassign_hours) {
+      setError(`Log the hours worked on ${jobassignId} before marking it completed.`);
+      return;
+    }
+
+    setUpdatingId(jobassignId);
     const today = new Date().toISOString().split("T")[0];
     const updatePayload = { jobassign_status: newStatus };
 
@@ -91,6 +106,19 @@ function JobAssignments() {
 
     try {
       await patch(`/job-assignments/${jobassignId}`, updatePayload);
+      await loadAll();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUpdatingId(null);
+    }
+  }
+
+  async function handleFieldChange(jobassignId, field, value) {
+    setUpdatingId(jobassignId);
+    setError("");
+    try {
+      await patch(`/job-assignments/${jobassignId}`, { [field]: value || null });
       await loadAll();
     } catch (err) {
       setError(err.message);
@@ -180,6 +208,8 @@ function JobAssignments() {
               <th className="py-2 pr-4">Visit</th>
               <th className="py-2 pr-4">Job</th>
               <th className="py-2 pr-4">Assigned By</th>
+              <th className="py-2 pr-4">Technician</th>
+              <th className="py-2 pr-4">Hours</th>
               <th className="py-2 pr-4">Status</th>
               <th className="py-2 pr-4">Cost</th>
               <th className="py-2 pr-4">Notes</th>
@@ -194,9 +224,40 @@ function JobAssignments() {
                 <td className="py-2 pr-4">{a.jobassign_assigned_by}</td>
                 <td className="py-2 pr-4">
                   <select
+                    value={a.jobassign_performed_by ?? ""}
+                    disabled={updatingId === a.jobassign_id}
+                    onChange={(e) => handleFieldChange(a.jobassign_id, "jobassign_performed_by", e.target.value)}
+                    className="bg-slate-700 text-white text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                  >
+                    <option value="">Unassigned</option>
+                    {technicians.map((t) => (
+                      <option key={t.emp_no} value={t.emp_no}>
+                        {t.emp_gname} {t.emp_fname}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td className="py-2 pr-4">
+                  <input
+                    type="number"
+                    step="0.25"
+                    min="0"
+                    defaultValue={a.jobassign_hours ?? ""}
+                    disabled={updatingId === a.jobassign_id}
+                    onBlur={(e) => {
+                      const v = e.target.value;
+                      if (v !== (a.jobassign_hours ?? "")) {
+                        handleFieldChange(a.jobassign_id, "jobassign_hours", v);
+                      }
+                    }}
+                    className="w-20 bg-slate-700 text-white text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                  />
+                </td>
+                <td className="py-2 pr-4">
+                  <select
                     value={a.jobassign_status}
                     disabled={updatingId === a.jobassign_id}
-                    onChange={(e) => handleStatusChange(a.jobassign_id, e.target.value)}
+                    onChange={(e) => handleStatusChange(a, e.target.value)}
                     className="bg-slate-700 text-white text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                   >
                     {STATUS_OPTIONS.map((opt) => (

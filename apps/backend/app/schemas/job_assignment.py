@@ -7,6 +7,8 @@ class JobAssignmentCreate(BaseModel):
     visit_id: str
     job_no: str
     jobassign_assigned_by: str
+    jobassign_performed_by: Optional[str] = None
+    jobassign_hours: Optional[Decimal] = None
     jobassign_assign_dt: date
     jobassign_start_dt: Optional[date] = None
     jobassign_complete_dt: Optional[date] = None
@@ -19,6 +21,8 @@ class JobAssignmentResponse(BaseModel):
     visit_id: str
     job_no: str
     jobassign_assigned_by: str
+    jobassign_performed_by: Optional[str] = None
+    jobassign_hours: Optional[Decimal] = None
     jobassign_assign_dt: date
     jobassign_start_dt: Optional[date] = None
     jobassign_complete_dt: Optional[date] = None
@@ -30,6 +34,8 @@ class JobAssignmentResponse(BaseModel):
         from_attributes = True
 
 class JobAssignmentUpdate(BaseModel):
+    jobassign_performed_by: Optional[str] = None
+    jobassign_hours: Optional[Decimal] = None
     jobassign_start_dt: Optional[date] = None
     jobassign_complete_dt: Optional[date] = None
     jobassign_status: Optional[str] = None

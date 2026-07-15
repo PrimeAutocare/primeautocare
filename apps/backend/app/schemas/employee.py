@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import date
 from typing import Optional
+from decimal import Decimal
 
 class EmployeeCreate(BaseModel):
     emp_gname: str
@@ -10,6 +11,7 @@ class EmployeeCreate(BaseModel):
     emp_passhash: str
     emp_role: str
     emp_create_dt: date
+    emp_hourly_rate: Decimal
 
 class EmployeeResponse(BaseModel):
     emp_no: str
@@ -19,6 +21,7 @@ class EmployeeResponse(BaseModel):
     emp_email: str
     emp_role: str
     emp_create_dt: date
+    emp_hourly_rate: Decimal
 
     class Config:
         from_attributes = True
@@ -29,3 +32,4 @@ class EmployeeUpdate(BaseModel):
     emp_phone: Optional[str] = None
     emp_email: Optional[str] = None
     emp_role: Optional[str] = None
+    emp_hourly_rate: Optional[Decimal] = None

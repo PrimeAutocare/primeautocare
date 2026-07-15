@@ -14,6 +14,7 @@ function Employees() {
   const [emailInput, setEmailInput] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("T");
+  const [hourlyRate, setHourlyRate] = useState("");
 
   const ROLE_LABELS = { A: "Admin", S: "Supervisor", T: "Technician" };
 
@@ -49,6 +50,7 @@ function Employees() {
         emp_passhash: password,
         emp_role: role,
         emp_create_dt: new Date().toISOString().split("T")[0],
+        emp_hourly_rate: hourlyRate,
       });
       setGname("");
       setFname("");
@@ -56,6 +58,7 @@ function Employees() {
       setEmailInput("");
       setPassword("");
       setRole("T");
+      setHourlyRate("");
       await loadEmployees();
     } catch (err) {
       setFormError(err.message);
@@ -163,6 +166,19 @@ function Employees() {
           </select>
         </div>
 
+        <div>
+          <label className="block text-slate-300 text-sm mb-1">Hourly Rate</label>
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            value={hourlyRate}
+            onChange={(e) => setHourlyRate(e.target.value)}
+            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
         <button
           type="submit"
           disabled={submitting}
@@ -183,6 +199,7 @@ function Employees() {
               <th className="py-2 pr-4">Phone</th>
               <th className="py-2 pr-4">Email</th>
               <th className="py-2 pr-4">Role</th>
+              <th className="py-2 pr-4">Hourly Rate</th>
               <th className="py-2 pr-4"></th>
             </tr>
           </thead>
@@ -194,6 +211,7 @@ function Employees() {
                 <td className="py-2 pr-4">{emp.emp_phone}</td>
                 <td className="py-2 pr-4">{emp.emp_email}</td>
                 <td className="py-2 pr-4">{ROLE_LABELS[emp.emp_role] ?? emp.emp_role}</td>
+                <td className="py-2 pr-4">{emp.emp_hourly_rate ?? "-"}</td>
                 <td className="py-2 pr-4">
                   <button
                     onClick={() => handleDelete(emp.emp_no)}

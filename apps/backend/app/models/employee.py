@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, CHAR, Date, FetchedValue
+from sqlalchemy import Column, String, CHAR, Date, Numeric, FetchedValue
 from app.database import Base
 
 class Employee(Base):
@@ -12,3 +12,4 @@ class Employee(Base):
     emp_passhash = Column(String(60), nullable=False)
     emp_role = Column(CHAR(1), nullable=False)
     emp_create_dt = Column(Date, nullable=False)
+    emp_hourly_rate = Column(Numeric(7, 2), nullable=False)

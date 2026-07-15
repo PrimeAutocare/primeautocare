@@ -27,7 +27,8 @@ CREATE TABLE EMPLOYEE (
     emp_email     VARCHAR(30)  NOT NULL,
     emp_passhash  VARCHAR(60)  NOT NULL,
     emp_role      CHAR(1)      NOT NULL,
-    emp_create_dt DATE         NOT NULL
+    emp_create_dt DATE         NOT NULL,
+    emp_hourly_rate NUMERIC(7, 2) NOT NULL
 );
 ALTER SEQUENCE employee_seq OWNED BY EMPLOYEE.emp_no;
 COMMENT ON COLUMN EMPLOYEE.emp_no        IS 'Unique employee code — EM + 4 digits (e.g. EM0001)';
@@ -38,9 +39,11 @@ COMMENT ON COLUMN EMPLOYEE.emp_email     IS 'Work email address; must be unique 
 COMMENT ON COLUMN EMPLOYEE.emp_passhash  IS 'Hashed password for system login';
 COMMENT ON COLUMN EMPLOYEE.emp_role      IS 'Role code: A = Admin, S = Supervisor, T = Technician';
 COMMENT ON COLUMN EMPLOYEE.emp_create_dt IS 'Date the employee account was created in the system';
+COMMENT ON COLUMN EMPLOYEE.emp_hourly_rate IS 'Pay rate per hour worked; basis for payroll reporting';
 ALTER TABLE EMPLOYEE ADD CONSTRAINT emp_email_uq UNIQUE (emp_email);
 ALTER TABLE EMPLOYEE ADD CONSTRAINT emp_role_chk CHECK (emp_role IN ('A', 'S', 'T'));
 ALTER TABLE EMPLOYEE ADD CONSTRAINT emp_no_fmt_chk CHECK (emp_no ~ '^EM[0-9]{4}$');
+ALTER TABLE EMPLOYEE ADD CONSTRAINT emp_hourly_rate_chk CHECK (emp_hourly_rate >= 0);
 
 -- JOB
 DROP TABLE IF EXISTS JOB CASCADE;
@@ -136,6 +139,8 @@ CREATE TABLE JOB_ASSIGNMENT (
     visit_id              VARCHAR(6)   NOT NULL,
     job_no                VARCHAR(6)   NOT NULL,
     jobassign_assigned_by VARCHAR(6)   NOT NULL,
+    jobassign_performed_by VARCHAR(6),
+    jobassign_hours       NUMERIC(5, 2),
     jobassign_assign_dt   DATE         NOT NULL,
     jobassign_start_dt    DATE,
     jobassign_complete_dt DATE,
@@ -148,6 +153,8 @@ COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_id          IS 'Unique job assignment
 COMMENT ON COLUMN JOB_ASSIGNMENT.visit_id              IS 'Reference to the VEHICLE_VISIT this assignment belongs to';
 COMMENT ON COLUMN JOB_ASSIGNMENT.job_no                IS 'Reference to the JOB type being performed';
 COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_assigned_by IS 'emp_no of the employee who created this assignment';
+COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_performed_by IS 'emp_no of the technician who carried out the work; NULL until work starts';
+COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_hours IS 'Labour hours logged against this assignment; basis for utilization and payroll';
 COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_assign_dt   IS 'Date the job was assigned';
 COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_start_dt    IS 'Date work started; NULL until the technician begins';
 COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_complete_dt IS 'Date work was completed; NULL until finished';
@@ -157,5 +164,69 @@ COMMENT ON COLUMN JOB_ASSIGNMENT.jobassign_notes       IS 'Optional free-text no
 ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT vehicle_visit_job_assignment_fk FOREIGN KEY (visit_id) REFERENCES VEHICLE_VISIT (visit_id);
 ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT job_job_assignment_fk FOREIGN KEY (job_no) REFERENCES JOB (job_no);
 ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT employee_job_assignment_fk FOREIGN KEY (jobassign_assigned_by) REFERENCES EMPLOYEE (emp_no);
+ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT performer_job_assignment_fk FOREIGN KEY (jobassign_performed_by) REFERENCES EMPLOYEE (emp_no);
 ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT jobassign_status_chk CHECK (jobassign_status IN ('P', 'I', 'C', 'X'));
 ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT jobassign_id_fmt_chk CHECK (jobassign_id ~ '^JA[0-9]{4}$');
+ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT jobassign_hours_chk CHECK (jobassign_hours IS NULL OR jobassign_hours > 0);
+-- Work that has started or finished must name the technician who did it,
+-- otherwise utilization silently under-reports.
+ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT jobassign_performer_req_chk
+    CHECK (jobassign_status NOT IN ('I', 'C') OR jobassign_performed_by IS NOT NULL);
+-- Completed work must have logged hours, otherwise payroll silently under-pays.
+ALTER TABLE JOB_ASSIGNMENT ADD CONSTRAINT jobassign_hours_req_chk
+    CHECK (jobassign_status <> 'C' OR jobassign_hours IS NOT NULL);
+
+-- ── 5. Depends on VEHICLE_VISIT ─────────────────────────────────────────────
+
+-- INVOICE
+-- One bill per workshop visit: the customer collects the vehicle and settles
+-- the total of the completed jobs on that visit.
+DROP TABLE IF EXISTS INVOICE CASCADE;
+DROP SEQUENCE IF EXISTS invoice_seq CASCADE;
+CREATE SEQUENCE invoice_seq;
+CREATE TABLE INVOICE (
+    inv_no     VARCHAR(6)    CONSTRAINT invoice_pk PRIMARY KEY
+                             DEFAULT 'IN' || LPAD(NEXTVAL('invoice_seq')::TEXT, 4, '0'),
+    visit_id   VARCHAR(6)    NOT NULL,
+    inv_date   DATE          NOT NULL,
+    inv_total  NUMERIC(10, 2) NOT NULL,
+    inv_status CHAR(1)       NOT NULL
+);
+ALTER SEQUENCE invoice_seq OWNED BY INVOICE.inv_no;
+COMMENT ON COLUMN INVOICE.inv_no     IS 'Unique invoice code — IN + 4 digits (e.g. IN0001)';
+COMMENT ON COLUMN INVOICE.visit_id   IS 'Reference to the VEHICLE_VISIT being billed; one invoice per visit';
+COMMENT ON COLUMN INVOICE.inv_date   IS 'Date the invoice was raised';
+COMMENT ON COLUMN INVOICE.inv_total  IS 'Total billed — sum of completed JOB_ASSIGNMENT costs on the visit';
+COMMENT ON COLUMN INVOICE.inv_status IS 'Status: U = Unpaid, P = Partially paid, S = Settled, V = Void';
+ALTER TABLE INVOICE ADD CONSTRAINT vehicle_visit_invoice_fk FOREIGN KEY (visit_id) REFERENCES VEHICLE_VISIT (visit_id);
+ALTER TABLE INVOICE ADD CONSTRAINT inv_visit_uq UNIQUE (visit_id);
+ALTER TABLE INVOICE ADD CONSTRAINT inv_status_chk CHECK (inv_status IN ('U', 'P', 'S', 'V'));
+ALTER TABLE INVOICE ADD CONSTRAINT inv_total_chk CHECK (inv_total >= 0);
+ALTER TABLE INVOICE ADD CONSTRAINT inv_no_fmt_chk CHECK (inv_no ~ '^IN[0-9]{4}$');
+
+-- ── 6. Depends on INVOICE ───────────────────────────────────────────────────
+
+-- PAYMENT
+-- An invoice may be settled over several payments, so this is its own table
+-- rather than a paid flag on INVOICE.
+DROP TABLE IF EXISTS PAYMENT CASCADE;
+DROP SEQUENCE IF EXISTS payment_seq CASCADE;
+CREATE SEQUENCE payment_seq;
+CREATE TABLE PAYMENT (
+    pay_no     VARCHAR(6)    CONSTRAINT payment_pk PRIMARY KEY
+                             DEFAULT 'PY' || LPAD(NEXTVAL('payment_seq')::TEXT, 4, '0'),
+    inv_no     VARCHAR(6)    NOT NULL,
+    pay_date   DATE          NOT NULL,
+    pay_amount NUMERIC(10, 2) NOT NULL,
+    pay_method CHAR(1)       NOT NULL
+);
+ALTER SEQUENCE payment_seq OWNED BY PAYMENT.pay_no;
+COMMENT ON COLUMN PAYMENT.pay_no     IS 'Unique payment code — PY + 4 digits (e.g. PY0001)';
+COMMENT ON COLUMN PAYMENT.inv_no     IS 'Reference to the INVOICE being paid';
+COMMENT ON COLUMN PAYMENT.pay_date   IS 'Date the payment was received';
+COMMENT ON COLUMN PAYMENT.pay_amount IS 'Amount received in this payment; an invoice may take several';
+COMMENT ON COLUMN PAYMENT.pay_method IS 'Method: C = Cash, R = Card, T = Bank Transfer, Q = Cheque';
+ALTER TABLE PAYMENT ADD CONSTRAINT invoice_payment_fk FOREIGN KEY (inv_no) REFERENCES INVOICE (inv_no);
+ALTER TABLE PAYMENT ADD CONSTRAINT pay_method_chk CHECK (pay_method IN ('C', 'R', 'T', 'Q'));
+ALTER TABLE PAYMENT ADD CONSTRAINT pay_amount_chk CHECK (pay_amount > 0);
+ALTER TABLE PAYMENT ADD CONSTRAINT pay_no_fmt_chk CHECK (pay_no ~ '^PY[0-9]{4}$');

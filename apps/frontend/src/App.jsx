@@ -10,6 +10,7 @@ import VehicleVisits from "./pages/VehicleVisits";
 import Employees from "./pages/Employees";
 import Jobs from "./pages/Jobs";
 import JobAssignments from "./pages/JobAssignments";
+import Invoices from "./pages/Invoices";
 
 function App() {
   const { employee, loading } = useAuth();
@@ -37,6 +38,7 @@ function App() {
           <Route path="customers" element={<Customers />} />
           <Route path="employees" element={<Employees />} />
           <Route path="jobs" element={<Jobs />} />
+          <Route path="invoices" element={<Invoices />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

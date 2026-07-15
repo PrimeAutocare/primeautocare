@@ -8,6 +8,8 @@ class JobAssignment(Base):
     visit_id = Column(String(6), ForeignKey("vehicle_visit.visit_id"), nullable=False)
     job_no = Column(String(6), ForeignKey("job.job_no"), nullable=False)
     jobassign_assigned_by = Column(String(6), ForeignKey("employee.emp_no"), nullable=False)
+    jobassign_performed_by = Column(String(6), ForeignKey("employee.emp_no"), nullable=True)
+    jobassign_hours = Column(Numeric(5, 2), nullable=True)
     jobassign_assign_dt = Column(Date, nullable=False)
     jobassign_start_dt = Column(Date, nullable=True)
     jobassign_complete_dt = Column(Date, nullable=True)

@@ -1,22 +1,21 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/useAuth";
-
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
-import VehicleOwners from "./pages/VehicleOwners";
+import JobAssignments from "./pages/JobAssignments";
 import Vehicles from "./pages/Vehicles";
 import VehicleVisits from "./pages/VehicleVisits";
+import VehicleOwners from "./pages/VehicleOwners";
 import Employees from "./pages/Employees";
 import Jobs from "./pages/Jobs";
-import JobAssignments from "./pages/JobAssignments";
 
 function App() {
   const { employee, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
+      <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
         Loading...
       </div>
     );
@@ -33,7 +32,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="job-assignments" element={<JobAssignments />} />
           <Route path="vehicles" element={<Vehicles />} />
-          <Route path="vehicle-visits" element={<VehicleVisits />} />  
+          <Route path="vehicle-visits" element={<VehicleVisits />} />
           <Route path="vehicle-owners" element={<VehicleOwners />} />
           <Route path="employees" element={<Employees />} />
           <Route path="jobs" element={<Jobs />} />

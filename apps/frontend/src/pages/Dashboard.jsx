@@ -43,11 +43,11 @@ function Dashboard() {
   ).length;
 
   const cards = [
-    { label: "Active Visits", value: activeVisits, color: "bg-blue-600" },
-    { label: "Pending Jobs", value: pendingJobs, color: "bg-yellow-600" },
-    { label: "In-Progress Jobs", value: inProgressJobs, color: "bg-orange-600" },
-    { label: "Completed Today", value: completedToday, color: "bg-green-600" },
-  ];
+  { label: "Active Visits", value: activeVisits, color: "bg-orange-600" },
+  { label: "Pending Jobs", value: pendingJobs, color: "bg-amber-600" },
+  { label: "In-Progress Jobs", value: inProgressJobs, color: "bg-orange-700" },
+  { label: "Completed Today", value: completedToday, color: "bg-green-600" },
+];
 
   const recentAssignments = [...assignments]
     .sort((a, b) => b.jobassign_id - a.jobassign_id)

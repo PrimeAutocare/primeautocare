@@ -1,14 +1,25 @@
 import { useEffect, useState } from "react";
 import { get, post, del } from "../api/client";
+import { useAuth } from "../context/useAuth";
+import { canManage } from "../context/AuthContext";
+import Modal from "../components/Modal";
 
 function Jobs() {
+  const { employee: currentUser } = useAuth();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-
+  const [showModal, setShowModal] = useState(false);
   const [jobDesc, setJobDesc] = useState("");
+
+  const canCreate = canManage(currentUser, ["A", "S"]);
+  const canDelete = canManage(currentUser, ["A"]);
+
+  useEffect(() => {
+    loadJobs();
+  }, []);
 
   async function loadJobs() {
     setLoading(true);
@@ -23,12 +34,6 @@ function Jobs() {
     }
   }
 
-  useEffect(() => {
-    (async () => {
-      await loadJobs();
-    })();
-  }, []);
-
   async function handleSubmit(e) {
     e.preventDefault();
     setFormError("");
@@ -36,6 +41,7 @@ function Jobs() {
     try {
       await post("/jobs", { job_desc: jobDesc });
       setJobDesc("");
+      setShowModal(false);
       await loadJobs();
     } catch (err) {
       setFormError(err.message);
@@ -55,74 +61,65 @@ function Jobs() {
     }
   }
 
-  if (loading) return <p className="text-slate-400">Loading...</p>;
+  if (loading) return <p className="text-zinc-400">Loading...</p>;
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Job Catalog</h2>
-
-      <form
-        onSubmit={handleSubmit}
-        className="bg-slate-800 p-6 rounded-lg mb-8 flex flex-col gap-4 max-w-lg"
-      >
-        <h3 className="text-lg font-semibold">Add New Job Type</h3>
-
-        {formError && (
-          <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">
-            {formError}
-          </p>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-white">Job Catalog</h2>
+        {canCreate && (
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-orange-600 hover:bg-orange-500 text-white font-semibold px-4 py-2 rounded transition"
+          >
+            + Add Job
+          </button>
         )}
-
-        <div>
-          <label className="block text-slate-300 text-sm mb-1">Description</label>
-          <input
-            type="text"
-            value={jobDesc}
-            onChange={(e) => setJobDesc(e.target.value)}
-            placeholder="e.g. Tyre Rotation"
-            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold py-2 rounded transition"
-        >
-          {submitting ? "Adding..." : "Add Job"}
-        </button>
-      </form>
+      </div>
 
       {error && <p className="text-red-400 mb-4">{error}</p>}
 
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-700 text-slate-400 text-sm">
+            <tr className="border-b border-zinc-700 text-zinc-400 text-sm">
               <th className="py-2 pr-4">ID</th>
               <th className="py-2 pr-4">Description</th>
-              <th className="py-2 pr-4"></th>
+              {canDelete && <th className="py-2 pr-4"></th>}
             </tr>
           </thead>
           <tbody>
             {jobs.map((j) => (
-              <tr key={j.job_no} className="border-b border-slate-800 hover:bg-slate-800/50">
-                <td className="py-2 pr-4">{j.job_no}</td>
-                <td className="py-2 pr-4">{j.job_desc}</td>
-                <td className="py-2 pr-4">
-                  <button
-                    onClick={() => handleDelete(j.job_no)}
-                    className="text-red-400 hover:text-red-300 text-sm"
-                  >
-                    Delete
-                  </button>
-                </td>
+              <tr key={j.job_no} className="border-b border-zinc-800 hover:bg-zinc-800/50">
+                <td className="py-2 pr-4 text-white">{j.job_no}</td>
+                <td className="py-2 pr-4 text-white">{j.job_desc}</td>
+                {canDelete && (
+                  <td className="py-2 pr-4">
+                    <button onClick={() => handleDelete(j.job_no)} className="text-red-400 hover:text-red-300 text-sm">
+                      Delete
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setFormError(""); }} title="Add New Job Type">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {formError && <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">{formError}</p>}
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Description</label>
+            <input type="text" value={jobDesc} onChange={(e) => setJobDesc(e.target.value)} placeholder="e.g. Tyre Rotation"
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required />
+          </div>
+          <button type="submit" disabled={submitting}
+            className="bg-orange-600 hover:bg-orange-500 disabled:opacity-50 text-white font-semibold py-2 rounded transition">
+            {submitting ? "Adding..." : "Add Job"}
+          </button>
+        </form>
+      </Modal>
     </div>
   );
 }

@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import { post, get } from "../api/client";
 import { AuthContext } from "./AuthContextInstance";
 
+export function canManage(employee, allowedRoles) {
+  if (!employee) return false;
+  return allowedRoles.includes(employee.emp_role);
+}
+
 export function AuthProvider({ children }) {
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);

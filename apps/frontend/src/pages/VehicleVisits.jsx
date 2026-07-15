@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { get, post, patch } from "../api/client";
+import Modal from "../components/Modal";
 
 function VehicleVisits() {
   const [visits, setVisits] = useState([]);
@@ -9,6 +10,7 @@ function VehicleVisits() {
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [updatingId, setUpdatingId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const [vehiId, setVehiId] = useState("");
 
@@ -19,14 +21,15 @@ function VehicleVisits() {
     { value: "O", label: "Out / Picked Up" },
   ];
 
+  useEffect(() => {
+    loadAll();
+  }, []);
+
   async function loadAll() {
     setLoading(true);
     setError("");
     try {
-      const [visitsData, vehiclesData] = await Promise.all([
-        get("/vehicle-visits"),
-        get("/vehicles"),
-      ]);
+      const [visitsData, vehiclesData] = await Promise.all([get("/vehicle-visits"), get("/vehicles")]);
       setVisits(visitsData);
       setVehicles(vehiclesData);
     } catch (err) {
@@ -35,12 +38,6 @@ function VehicleVisits() {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    (async () => {
-      await loadAll();
-    })();
-  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -53,6 +50,7 @@ function VehicleVisits() {
         visit_status: "C",
       });
       setVehiId("");
+      setShowModal(false);
       await loadAll();
     } catch (err) {
       setFormError(err.message);
@@ -64,12 +62,8 @@ function VehicleVisits() {
   async function handleStatusChange(visitId, newStatus) {
     setUpdatingId(visitId);
     setError("");
-
     const updatePayload = { visit_status: newStatus };
-    if (newStatus === "O") {
-      updatePayload.visit_check_out_dt = new Date().toISOString().split("T")[0];
-    }
-
+    if (newStatus === "O") updatePayload.visit_check_out_dt = new Date().toISOString().split("T")[0];
     try {
       await patch(`/vehicle-visits/${visitId}`, updatePayload);
       await loadAll();
@@ -80,61 +74,29 @@ function VehicleVisits() {
     }
   }
 
-  function vehicleLabel(vehiId) {
-    const vehicle = vehicles.find((v) => v.vehi_id === vehiId);
-    return vehicle ? `${vehicle.vehi_license} (${vehicle.vehi_make} ${vehicle.vehi_model})` : `#${vehiId}`;
+  function vehicleLabel(id) {
+    const vehicle = vehicles.find((v) => v.vehi_id === id);
+    return vehicle ? `${vehicle.vehi_license} (${vehicle.vehi_make} ${vehicle.vehi_model})` : `#${id}`;
   }
 
-  if (loading) return <p className="text-slate-400">Loading...</p>;
+  if (loading) return <p className="text-zinc-400">Loading...</p>;
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Vehicle Visits</h2>
-
-      <form
-        onSubmit={handleSubmit}
-        className="bg-slate-800 p-6 rounded-lg mb-8 flex flex-col gap-4 max-w-lg"
-      >
-        <h3 className="text-lg font-semibold">Check In a Vehicle</h3>
-
-        {formError && (
-          <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">
-            {formError}
-          </p>
-        )}
-
-        <div>
-          <label className="block text-slate-300 text-sm mb-1">Vehicle</label>
-          <select
-            value={vehiId}
-            onChange={(e) => setVehiId(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          >
-            <option value="" disabled>Select a vehicle</option>
-            {vehicles.map((v) => (
-              <option key={v.vehi_id} value={v.vehi_id}>
-                {v.vehi_license} — {v.vehi_make} {v.vehi_model}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold py-2 rounded transition"
-        >
-          {submitting ? "Checking In..." : "Check In"}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-white">Vehicle Visits</h2>
+        <button onClick={() => setShowModal(true)}
+          className="bg-orange-600 hover:bg-orange-500 text-white font-semibold px-4 py-2 rounded transition">
+          + Check In Vehicle
         </button>
-      </form>
+      </div>
 
       {error && <p className="text-red-400 mb-4">{error}</p>}
 
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-700 text-slate-400 text-sm">
+            <tr className="border-b border-zinc-700 text-zinc-400 text-sm">
               <th className="py-2 pr-4">ID</th>
               <th className="py-2 pr-4">Vehicle</th>
               <th className="py-2 pr-4">Checked In</th>
@@ -144,23 +106,16 @@ function VehicleVisits() {
           </thead>
           <tbody>
             {visits.map((v) => (
-              <tr key={v.visit_id} className="border-b border-slate-800 hover:bg-slate-800/50">
-                <td className="py-2 pr-4">{v.visit_id}</td>
-                <td className="py-2 pr-4">{vehicleLabel(v.vehi_id)}</td>
-                <td className="py-2 pr-4">{v.visit_check_in_dt}</td>
-                <td className="py-2 pr-4">{v.visit_check_out_dt ?? "-"}</td>
+              <tr key={v.visit_id} className="border-b border-zinc-800 hover:bg-zinc-800/50">
+                <td className="py-2 pr-4 text-white">{v.visit_id}</td>
+                <td className="py-2 pr-4 text-zinc-300">{vehicleLabel(v.vehi_id)}</td>
+                <td className="py-2 pr-4 text-zinc-300">{v.visit_check_in_dt}</td>
+                <td className="py-2 pr-4 text-zinc-300">{v.visit_check_out_dt ?? "-"}</td>
                 <td className="py-2 pr-4">
-                  <select
-                    value={v.visit_status}
-                    disabled={updatingId === v.visit_id}
+                  <select value={v.visit_status} disabled={updatingId === v.visit_id}
                     onChange={(e) => handleStatusChange(v.visit_id, e.target.value)}
-                    className="bg-slate-700 text-white text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                  >
-                    {STATUS_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
+                    className="bg-zinc-700 text-white text-sm rounded px-2 py-1 outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50">
+                    {STATUS_OPTIONS.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                   </select>
                 </td>
               </tr>
@@ -168,6 +123,24 @@ function VehicleVisits() {
           </tbody>
         </table>
       </div>
+
+      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setFormError(""); }} title="Check In a Vehicle">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {formError && <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">{formError}</p>}
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Vehicle</label>
+            <select value={vehiId} onChange={(e) => setVehiId(e.target.value)}
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required>
+              <option value="" disabled>Select a vehicle</option>
+              {vehicles.map((v) => <option key={v.vehi_id} value={v.vehi_id}>{v.vehi_license} — {v.vehi_make} {v.vehi_model}</option>)}
+            </select>
+          </div>
+          <button type="submit" disabled={submitting}
+            className="bg-orange-600 hover:bg-orange-500 disabled:opacity-50 text-white font-semibold py-2 rounded transition">
+            {submitting ? "Checking In..." : "Check In"}
+          </button>
+        </form>
+      </Modal>
     </div>
   );
 }

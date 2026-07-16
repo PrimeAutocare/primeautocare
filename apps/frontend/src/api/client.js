@@ -1,4 +1,7 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+// Same origin in production: Vercel rewrites /api/* to the Python function,
+// so a relative base works with no env var needed. Local dev overrides this
+// via VITE_API_BASE_URL (see .env.example) to point at the standalone backend.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
 async function request(endpoint, options = {}) {
   const headers = {

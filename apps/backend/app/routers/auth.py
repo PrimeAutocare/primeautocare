@@ -1,3 +1,5 @@
+import os
+
 from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 
@@ -8,6 +10,11 @@ from app.schemas.auth import LoginRequest
 from app.auth import verify_password, create_access_token, get_current_employee
 
 router = APIRouter()
+
+# Vercel sets VERCEL_ENV to "production"/"preview"/"development" automatically,
+# so deployed environments get a secure cookie with no manual config needed;
+# local dev (VERCEL_ENV unset) still runs over plain HTTP.
+COOKIE_SECURE = os.getenv("VERCEL_ENV") in ("production", "preview")
 
 @router.post("/login")
 def login(credentials: LoginRequest, response: Response, db: Session = Depends(get_db)):
@@ -23,7 +30,7 @@ def login(credentials: LoginRequest, response: Response, db: Session = Depends(g
         value=token,
         httponly=True,
         samesite="lax",
-        secure=False,  # set to True once you deploy with HTTPS
+        secure=COOKIE_SECURE,
         max_age=60 * 60 * 8,  # 8 hours, matches token expiry
     )
 

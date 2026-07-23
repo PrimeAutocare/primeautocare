@@ -1,7 +1,7 @@
 # PrimeAutocare
 
-A vehicle service center management system: tracks customers, vehicles, service
-visits, and the job assignments performed on each visit.
+A vehicle service center management system: tracks customers, vehicles, jobs
+(from creation through completion), invoicing, and employee attendance.
 
 Built as a portfolio project by a two-person team —
 [Inuka Wijerathna](https://github.com/InukaWijerathna) and
@@ -68,6 +68,10 @@ npm run dev
 ```bash
 cd apps/backend
 pytest
+
+cd apps/frontend
+npm run lint
+npm test
 ```
 
 ## Deployment

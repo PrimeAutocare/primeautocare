@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { get, patch } from "../api/client";
 import { useAuth } from "../context/useAuth";
-import { canManage } from "../context/AuthContext";
+import { canManage } from "../context/canManage";
 import Modal from "../components/Modal";
 import NewJobModal from "../components/NewJobModal";
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { get, post } from "../api/client";
 import { useAuth } from "../context/useAuth";
-import { canManage } from "../context/AuthContext";
+import { canManage } from "../context/canManage";
 
 function Attendance() {
   const { employee } = useAuth();

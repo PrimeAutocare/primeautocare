@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/useAuth";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { login } = useAuth();
@@ -11,7 +11,7 @@ function Login() {
     e.preventDefault();
     setError("");
     try {
-      await login(email, password);
+      await login(username, password);
     } catch (err) {
       setError(err.message);
     }
@@ -31,11 +31,11 @@ function Login() {
           </p>
         )}
 
-        <label className="block text-zinc-300 text-sm mb-1">Email</label>
+        <label className="block text-zinc-300 text-sm mb-1">Username</label>
         <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className="w-full p-2 mb-4 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500"
           required
         />

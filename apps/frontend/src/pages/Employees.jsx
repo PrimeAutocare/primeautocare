@@ -17,6 +17,7 @@ function Employees() {
   const [fname, setFname] = useState("");
   const [phone, setPhone] = useState("");
   const [emailInput, setEmailInput] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("T");
   const [hourlyRate, setHourlyRate] = useState("");
@@ -47,6 +48,7 @@ function Employees() {
     setFname("");
     setPhone("");
     setEmailInput("");
+    setUsername("");
     setPassword("");
     setRole("T");
     setHourlyRate("");
@@ -63,6 +65,7 @@ function Employees() {
         emp_fname: fname,
         emp_phone: phone,
         emp_email: emailInput,
+        emp_username: username,
         emp_passhash: password,
         emp_role: role,
         emp_create_dt: new Date().toISOString().split("T")[0],
@@ -115,6 +118,7 @@ function Employees() {
               <th className="py-2 pr-4">Name</th>
               <th className="py-2 pr-4">Phone</th>
               <th className="py-2 pr-4">Email</th>
+              <th className="py-2 pr-4">Username</th>
               <th className="py-2 pr-4">Role</th>
               <th className="py-2 pr-4">Rate</th>
               {canDelete && <th className="py-2 pr-4"></th>}
@@ -127,6 +131,7 @@ function Employees() {
                 <td className="py-2 pr-4 text-white">{emp.emp_gname} {emp.emp_fname}</td>
                 <td className="py-2 pr-4 text-zinc-300">{emp.emp_phone}</td>
                 <td className="py-2 pr-4 text-zinc-300">{emp.emp_email}</td>
+                <td className="py-2 pr-4 text-zinc-300">{emp.emp_username}</td>
                 <td className="py-2 pr-4 text-zinc-300">{ROLE_LABELS[emp.emp_role] ?? emp.emp_role}</td>
                 <td className="py-2 pr-4 text-zinc-300">{emp.emp_hourly_rate}</td>
                 {canDelete && (
@@ -170,6 +175,11 @@ function Employees() {
           <div>
             <label className="block text-zinc-300 text-sm mb-1">Email</label>
             <input type="email" value={emailInput} onChange={(e) => setEmailInput(e.target.value)}
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required />
+          </div>
+          <div>
+            <label className="block text-zinc-300 text-sm mb-1">Username</label>
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}
               className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required />
           </div>
           <div>

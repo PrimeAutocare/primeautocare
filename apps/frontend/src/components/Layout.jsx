@@ -1,19 +1,27 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 
+const ADMIN_NAV = [
+  { to: "/", label: "Dashboard" },
+  { to: "/jobs", label: "Jobs" },
+  { to: "/vehicles", label: "Vehicles" },
+  { to: "/customers", label: "Customers" },
+  { to: "/employees", label: "Employees" },
+  { to: "/job-catalog", label: "Job Catalog" },
+  { to: "/invoices", label: "Invoices" },
+  { to: "/attendance", label: "Attendance" },
+];
+
+const EMPLOYEE_NAV = [
+  { to: "/", label: "Dashboard" },
+  { to: "/jobs", label: "My Jobs" },
+  { to: "/attendance", label: "Attendance" },
+];
+
 function Layout() {
   const { employee, logout } = useAuth();
 
-  const navItems = [
-    { to: "/", label: "Dashboard" },
-    { to: "/job-assignments", label: "Job Assignments" },
-    { to: "/vehicles", label: "Vehicles" },
-    { to: "/vehicle-visits", label: "Visits" },
-    { to: "/customers", label: "Customers" },
-    { to: "/employees", label: "Employees" },
-    { to: "/jobs", label: "Job Catalog" },
-    { to: "/invoices", label: "Invoices" },
-  ];
+  const navItems = employee?.emp_role === "A" ? ADMIN_NAV : EMPLOYEE_NAV;
 
   return (
     <div className="h-screen flex bg-zinc-900 text-white overflow-hidden">
@@ -25,6 +33,7 @@ function Layout() {
             <NavLink
               key={item.to}
               to={item.to}
+              end={item.to === "/"}
               className={({ isActive }) =>
                 `px-3 py-2 rounded transition ${
                   isActive

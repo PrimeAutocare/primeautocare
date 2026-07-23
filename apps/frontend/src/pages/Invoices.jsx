@@ -87,7 +87,7 @@ function Invoices() {
           <thead>
             <tr className="border-b border-zinc-700 text-zinc-400 text-sm">
               <th className="py-2 pr-4">Invoice</th>
-              <th className="py-2 pr-4">Visit</th>
+              <th className="py-2 pr-4">Job</th>
               <th className="py-2 pr-4">Date</th>
               <th className="py-2 pr-4">Total</th>
               <th className="py-2 pr-4">Paid</th>
@@ -107,7 +107,7 @@ function Invoices() {
               return (
                 <tr key={i.inv_no} className="border-b border-zinc-800 hover:bg-zinc-800/50">
                   <td className="py-2 pr-4 text-white">{i.inv_no}</td>
-                  <td className="py-2 pr-4 text-zinc-300">{i.visit_id}</td>
+                  <td className="py-2 pr-4 text-zinc-300">{i.job_id}</td>
                   <td className="py-2 pr-4 text-zinc-300">{i.inv_date}</td>
                   <td className="py-2 pr-4 text-zinc-300">{money(i.inv_total)}</td>
                   <td className="py-2 pr-4 text-zinc-300">{money(paid)}</td>

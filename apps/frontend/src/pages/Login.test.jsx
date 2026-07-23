@@ -19,12 +19,12 @@ describe("Login", () => {
     expect(screen.getByRole("button", { name: "Log In" })).toBeInTheDocument();
   });
 
-  it("submits the entered email and password to login", async () => {
+  it("submits the entered username and password to login", async () => {
     const login = vi.fn().mockResolvedValue();
     const { container } = renderLogin(login);
 
-    fireEvent.change(container.querySelector('input[type="email"]'), {
-      target: { value: "test@primeautocare.com" },
+    fireEvent.change(container.querySelector('input[type="text"]'), {
+      target: { value: "jmartin" },
     });
     fireEvent.change(container.querySelector('input[type="password"]'), {
       target: { value: "secret123" },
@@ -32,7 +32,7 @@ describe("Login", () => {
     fireEvent.click(screen.getByRole("button", { name: "Log In" }));
 
     await waitFor(() =>
-      expect(login).toHaveBeenCalledWith("test@primeautocare.com", "secret123")
+      expect(login).toHaveBeenCalledWith("jmartin", "secret123")
     );
   });
 });

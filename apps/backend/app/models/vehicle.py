@@ -5,7 +5,7 @@ class Vehicle(Base):
     __tablename__ = "vehicle"
 
     vehi_id = Column(String(6), primary_key=True, server_default=FetchedValue())
-    cust_no = Column(String(6), ForeignKey("customer.cust_no"), nullable=False)
+    cust_no = Column(String(6), ForeignKey("customer.cust_no"), nullable=True)
     vehi_license = Column(String(10), nullable=False)
     vehi_make = Column(String(20), nullable=False)
     vehi_model = Column(String(20), nullable=False)

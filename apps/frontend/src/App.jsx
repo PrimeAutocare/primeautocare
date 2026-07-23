@@ -6,11 +6,11 @@ import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Customers from "./pages/Customers";
 import Vehicles from "./pages/Vehicles";
-import VehicleVisits from "./pages/VehicleVisits";
 import Employees from "./pages/Employees";
+import JobCatalog from "./pages/JobCatalog";
 import Jobs from "./pages/Jobs";
-import JobAssignments from "./pages/JobAssignments";
 import Invoices from "./pages/Invoices";
+import Attendance from "./pages/Attendance";
 
 function App() {
   const { employee, loading } = useAuth();
@@ -32,13 +32,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
-          <Route path="job-assignments" element={<JobAssignments />} />
+          <Route path="jobs" element={<Jobs />} />
           <Route path="vehicles" element={<Vehicles />} />
-          <Route path="vehicle-visits" element={<VehicleVisits />} />
           <Route path="customers" element={<Customers />} />
           <Route path="employees" element={<Employees />} />
-          <Route path="jobs" element={<Jobs />} />
+          <Route path="job-catalog" element={<JobCatalog />} />
           <Route path="invoices" element={<Invoices />} />
+          <Route path="attendance" element={<Attendance />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

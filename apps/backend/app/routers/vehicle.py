@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 
 from app.auth import get_current_employee, require_role
 from app.database import get_db
@@ -13,6 +13,26 @@ router = APIRouter()
 @router.get("/vehicles", response_model=List[VehicleResponse])
 def get_vehicles(db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
     return db.query(Vehicle).order_by(Vehicle.vehi_id.asc()).all()
+
+@router.get("/vehicles/lookup", response_model=Optional[VehicleResponse])
+def lookup_vehicle(license: str, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
+    return db.query(Vehicle).filter(Vehicle.vehi_license == license).first()
+
+@router.get("/vehicles/makes", response_model=List[str])
+def get_makes(db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
+    rows = db.query(Vehicle.vehi_make).distinct().order_by(Vehicle.vehi_make.asc()).all()
+    return [row[0] for row in rows]
+
+@router.get("/vehicles/models", response_model=List[str])
+def get_models(make: str, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
+    rows = (
+        db.query(Vehicle.vehi_model)
+        .filter(Vehicle.vehi_make == make)
+        .distinct()
+        .order_by(Vehicle.vehi_model.asc())
+        .all()
+    )
+    return [row[0] for row in rows]
 
 @router.post("/vehicles", response_model=VehicleResponse)
 def create_vehicle(vehicle: VehicleCreate, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):

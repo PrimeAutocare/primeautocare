@@ -55,7 +55,7 @@ function Vehicles() {
     setSubmitting(true);
     try {
       await post("/vehicles", {
-        cust_no: custNo,
+        cust_no: custNo || null,
         vehi_license: license,
         vehi_make: make,
         vehi_model: model,
@@ -140,10 +140,10 @@ function Vehicles() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {formError && <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded">{formError}</p>}
           <div>
-            <label className="block text-zinc-300 text-sm mb-1">Customer</label>
+            <label className="block text-zinc-300 text-sm mb-1">Customer (optional)</label>
             <select value={custNo} onChange={(e) => setCustNo(e.target.value)}
-              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500" required>
-              <option value="" disabled>Select a customer</option>
+              className="w-full p-2 rounded bg-zinc-700 text-white outline-none focus:ring-2 focus:ring-orange-500">
+              <option value="">No customer</option>
               {customers.map((c) => <option key={c.cust_no} value={c.cust_no}>{c.cust_name}</option>)}
             </select>
           </div>

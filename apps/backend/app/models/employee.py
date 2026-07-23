@@ -9,6 +9,7 @@ class Employee(Base):
     emp_fname = Column(String(15), nullable=False)
     emp_phone = Column(String(13), nullable=False)
     emp_email = Column(String(30), nullable=False, unique=True)
+    emp_username = Column(String(20), nullable=False, unique=True)
     emp_passhash = Column(String(60), nullable=False)
     emp_role = Column(CHAR(1), nullable=False)
     emp_create_dt = Column(Date, nullable=False)

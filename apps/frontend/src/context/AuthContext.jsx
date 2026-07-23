@@ -28,8 +28,8 @@ export function AuthProvider({ children }) {
     })();
   }, []);
 
-  async function login(emp_email, password) {
-    await post("/login", { emp_email, password });
+  async function login(emp_username, password) {
+    await post("/login", { emp_username, password });
     await checkAuth();
   }
 

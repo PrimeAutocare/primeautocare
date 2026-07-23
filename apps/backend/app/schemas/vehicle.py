@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 class VehicleCreate(BaseModel):
-    cust_no: str
+    cust_no: Optional[str] = None
     vehi_license: str
     vehi_make: str
     vehi_model: str
@@ -10,7 +10,7 @@ class VehicleCreate(BaseModel):
 
 class VehicleResponse(BaseModel):
     vehi_id: str
-    cust_no: str
+    cust_no: Optional[str] = None
     vehi_license: str
     vehi_make: str
     vehi_model: str

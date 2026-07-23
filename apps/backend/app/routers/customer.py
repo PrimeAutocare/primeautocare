@@ -14,6 +14,21 @@ router = APIRouter()
 def get_customers(db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
     return db.query(Customer).order_by(Customer.cust_no.asc()).all()
 
+@router.get("/customers/search", response_model=List[CustomerResponse])
+def search_customers(q: str, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
+    pattern = f"%{q}%"
+    return (
+        db.query(Customer)
+        .filter(
+            Customer.cust_name.ilike(pattern)
+            | Customer.cust_phone.ilike(pattern)
+            | Customer.cust_email.ilike(pattern)
+        )
+        .order_by(Customer.cust_no.asc())
+        .limit(20)
+        .all()
+    )
+
 @router.post("/customers", response_model=CustomerResponse)
 def create_customer(customer: CustomerCreate, db: Session = Depends(get_db), current_employee: Employee = Depends(get_current_employee)):
     new_customer = Customer(**customer.model_dump())

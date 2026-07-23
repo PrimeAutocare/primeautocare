@@ -8,6 +8,7 @@ class EmployeeCreate(BaseModel):
     emp_fname: str
     emp_phone: str
     emp_email: str
+    emp_username: str
     emp_passhash: str
     emp_role: str
     emp_create_dt: date
@@ -19,6 +20,7 @@ class EmployeeResponse(BaseModel):
     emp_fname: str
     emp_phone: str
     emp_email: str
+    emp_username: str
     emp_role: str
     emp_create_dt: date
     emp_hourly_rate: Decimal
@@ -31,5 +33,6 @@ class EmployeeUpdate(BaseModel):
     emp_fname: Optional[str] = None
     emp_phone: Optional[str] = None
     emp_email: Optional[str] = None
+    emp_username: Optional[str] = None
     emp_role: Optional[str] = None
     emp_hourly_rate: Optional[Decimal] = None

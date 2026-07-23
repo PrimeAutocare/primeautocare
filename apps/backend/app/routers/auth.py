@@ -18,10 +18,10 @@ COOKIE_SECURE = os.getenv("VERCEL_ENV") in ("production", "preview")
 
 @router.post("/login")
 def login(credentials: LoginRequest, response: Response, db: Session = Depends(get_db)):
-    employee = db.query(Employee).filter(Employee.emp_email == credentials.emp_email).first()
+    employee = db.query(Employee).filter(Employee.emp_username == credentials.emp_username).first()
 
     if not employee or not verify_password(credentials.password, employee.emp_passhash):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise HTTPException(status_code=401, detail="Invalid username or password")
 
     token = create_access_token({"sub": str(employee.emp_no), "role": employee.emp_role})
 
